@@ -64,7 +64,6 @@ void ARPGCharacterBase::AddStartupGameplayAbilities()
 
 		
 		TMap<TSubclassOf<UGE_Affix>, int32> SkillTreeMap = TMap<TSubclassOf<UGE_Affix>, int32>();
-
 		for (USkillNodeBase*& Node : SkillTreeNodes) //for each skillnode we have taken
 		{
 			for (TMap<TSubclassOf<UGE_Affix>, int32>::TIterator it = Node->NodeAffixes.CreateIterator(); it; ++it) //for each affix on the node
@@ -75,14 +74,22 @@ void ARPGCharacterBase::AddStartupGameplayAbilities()
 				{
 					SkillTreeMap.Add(it->Key, it->Value + SkillTreeMap[it->Key]); //if it does then add the new value to it
 				}
+				else
+				{
+					SkillTreeMap.Add(it->Key, it->Value); //if it doesn't then set the value to it
+				}
 			}
 		}
-		for (TMap<TSubclassOf<UGE_Affix>, int32>::TIterator it = SkillTreeMap.CreateIterator(); it; ++it)
+		TArray<TSubclassOf<UGE_Affix>> dumb = TArray<TSubclassOf<UGE_Affix>>();
+		SkillTreeMap.GetKeys(dumb);
+		for (int i = 0; i < dumb.Num(); i++)
 		{
+			TSubclassOf<UGE_Affix>& GameplayEffect = dumb[i];
+			int32 dumbdumb = SkillTreeMap[GameplayEffect];
 			FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 			EffectContext.AddSourceObject(this);
 
-			FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(it->Key, it->Value, EffectContext);
+			FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, dumbdumb, EffectContext);
 			if (NewHandle.IsValid())
 			{
 				FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
