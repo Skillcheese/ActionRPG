@@ -529,6 +529,7 @@ bool ARPGPlayerControllerBase::LoadSkillTree()
 		if (LoadSuccessful)
 		{
 			NotifySkillTreeLoaded();
+			RefreshEffects();
 			return true;
 		}
 	}

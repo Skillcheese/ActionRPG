@@ -47,21 +47,6 @@ void ARPGCharacterBase::AddStartupGameplayAbilities()
 				FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
 			}
 		}
-
-		TArray<TSubclassOf<UGE_Affix>> ArmorEffects = TArray<TSubclassOf<UGE_Affix>>();
-		ArmorValues.GetKeys(ArmorEffects);
-		for (TSubclassOf<UGE_Affix>& GameplayEffect : ArmorEffects)
-		{
-			FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
-			EffectContext.AddSourceObject(this);
-
-			FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, ArmorValues[GameplayEffect], EffectContext);
-			if (NewHandle.IsValid())
-			{
-				FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
-			}
-		}
-
 		
 		TMap<TSubclassOf<UGE_Affix>, int32> SkillTreeMap = TMap<TSubclassOf<UGE_Affix>, int32>();
 		for (USkillNodeBase*& Node : SkillTreeNodes) //for each skillnode we have taken
@@ -80,16 +65,36 @@ void ARPGCharacterBase::AddStartupGameplayAbilities()
 				}
 			}
 		}
-		TArray<TSubclassOf<UGE_Affix>> dumb = TArray<TSubclassOf<UGE_Affix>>();
-		SkillTreeMap.GetKeys(dumb);
-		for (int i = 0; i < dumb.Num(); i++)
+
+		TArray<TSubclassOf<UGE_Affix>> ArmorEffects = TArray<TSubclassOf<UGE_Affix>>();
+		ArmorValues.GetKeys(ArmorEffects);
+		TArray<TSubclassOf<UGE_Affix>> SkillTreeEffects = TArray<TSubclassOf<UGE_Affix>>();
+		SkillTreeMap.GetKeys(SkillTreeEffects);
+		TArray<TSubclassOf<UGE_Affix>> TotalEffects = TArray<TSubclassOf<UGE_Affix>>();
+		TotalEffects.Append(ArmorEffects);
+		for (TSubclassOf<UGE_Affix> &SkillTreeEffect : SkillTreeEffects)
 		{
-			TSubclassOf<UGE_Affix>& GameplayEffect = dumb[i];
-			int32 dumbdumb = SkillTreeMap[GameplayEffect];
+			if (!TotalEffects.Contains(SkillTreeEffect))
+			{
+				TotalEffects.Add(SkillTreeEffect);
+			}
+		}
+		for (TSubclassOf<UGE_Affix>& GameplayEffect : TotalEffects)
+		{
 			FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 			EffectContext.AddSourceObject(this);
 
-			FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, dumbdumb, EffectContext);
+			int32 a = 0;
+			int32 b = 0;
+			if (ArmorValues.Contains(GameplayEffect))
+			{
+				a = ArmorValues[GameplayEffect];
+			}
+			if (SkillTreeEffects.Contains(GameplayEffect))
+			{
+				b = SkillTreeMap[GameplayEffect];
+			}
+			FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, a + b, EffectContext);
 			if (NewHandle.IsValid())
 			{
 				FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
