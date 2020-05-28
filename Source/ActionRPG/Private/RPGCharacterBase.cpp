@@ -62,26 +62,29 @@ void ARPGCharacterBase::AddStartupGameplayAbilities()
 			}
 		}
 
-		TArray<TSubclassOf<UGE_Affix>> SkillTreeEffects = TArray<TSubclassOf<UGE_Affix>>();
+		
 		TMap<TSubclassOf<UGE_Affix>, int32> SkillTreeMap = TMap<TSubclassOf<UGE_Affix>, int32>();
-		for (USkillNodeBase*& Node : SkillTreeNodes)
+		for (USkillNodeBase*& Node : SkillTreeNodes) //for each skillnode we have taken
 		{
-			for (TMap<TSubclassOf<UGE_Affix>, int32>::TIterator it = Node->NodeAffixes.CreateIterator(); it; ++it)
+			for (TMap<TSubclassOf<UGE_Affix>, int32>::TIterator it = Node->NodeAffixes.CreateIterator(); it; ++it) //for each affix on the node
 			{
-				
-				/*
-				for (TSubclassOf<UGE_Affix>& GameplayEffect : SkillTreeEffects)
+				TArray<TSubclassOf<UGE_Affix>> SkillTreeEffects = TArray<TSubclassOf<UGE_Affix>>();
+				SkillTreeMap.GetKeys(SkillTreeEffects);
+				if (SkillTreeEffects.ContainsByPredicate([it](TSubclassOf<UGE_Affix> Affix) {return Affix == it->Key; })) //check if SkillTreeMap contains this affix already
 				{
-					FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
-					EffectContext.AddSourceObject(this);
-
-					FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, SkillTreeValues[GameplayEffect], EffectContext);
-					if (NewHandle.IsValid())
-					{
-						FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
-					}
+					SkillTreeMap.Add(it->Key, it->Value + SkillTreeMap[it->Key]); //if it does then add the new value to it
 				}
-				*/
+			}
+		}
+		for (TMap<TSubclassOf<UGE_Affix>, int32>::TIterator it = SkillTreeMap.CreateIterator(); it; ++it)
+		{
+			FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+			EffectContext.AddSourceObject(this);
+
+			FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(it->Key, it->Value, EffectContext);
+			if (NewHandle.IsValid())
+			{
+				FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
 			}
 		}
 
