@@ -81,6 +81,10 @@ void ARPGCharacterBase::AddStartupGameplayAbilities()
 		}
 		for (TSubclassOf<UGE_Affix>& GameplayEffect : TotalEffects)
 		{
+			if (!GameplayEffect)
+			{
+				continue;
+			}
 			FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 			EffectContext.AddSourceObject(this);
 
