@@ -34,6 +34,9 @@ public:
 	// Implement IAbilitySystemInterface
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SkillTree)
+	TArray<USkillNodeBase*> SkillTreeNodes;
+
 	/** Returns current health, will be 0 if dead */
 	UFUNCTION(BlueprintCallable)
 	virtual float GetHealth() const;
@@ -104,9 +107,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Armor)
 	TMap<TSubclassOf<UGE_Affix>, int32> ArmorValues;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillTree)
-	TArray<USkillNodeBase*> SkillTreeNodes;
 
 	/** Map of item slot to gameplay ability class, these are bound before any abilities added by the inventory */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)

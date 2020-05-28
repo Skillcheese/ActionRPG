@@ -66,7 +66,7 @@ bool ARPGPlayerControllerBase::AddInventoryItem(URPGLoot* NewItem, int32 count, 
 		{
 			if (!a || b)
 			{
-				NewItem->Data.UpdateItemCountLevel(count);
+				NewItem->Data.ItemCount = count;
 				InventoryItems.Add(NewItem);
 				NotifyInventoryItemChanged(true, NewItem);
 				bChanged = true;
@@ -170,6 +170,7 @@ int32 ARPGPlayerControllerBase::SetSkillNodeTaken(USkillNodeBase * SkillNode, bo
 				else
 				{
 					SkillNodesTaken.RemoveAt(i);
+					RefreshEffects();
 					SaveInventory();
 					return 1;
 				}
@@ -179,6 +180,7 @@ int32 ARPGPlayerControllerBase::SetSkillNodeTaken(USkillNodeBase * SkillNode, bo
 	if (Taken)
 	{
 		SkillNodesTaken.Add(SkillNode);
+		RefreshEffects();
 		SaveInventory();
 		return 1;
 	}
@@ -409,6 +411,7 @@ bool ARPGPlayerControllerBase::RefreshEffects()
 		ARPGCharacterBase* character = Cast<ARPGCharacterBase>(pawn);
 		if (character)
 		{
+			character->SkillTreeNodes = SkillNodesTaken;
 			return character->RefreshEffects();
 		}
 	}

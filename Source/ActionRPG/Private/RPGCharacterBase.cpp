@@ -64,6 +64,7 @@ void ARPGCharacterBase::AddStartupGameplayAbilities()
 
 		
 		TMap<TSubclassOf<UGE_Affix>, int32> SkillTreeMap = TMap<TSubclassOf<UGE_Affix>, int32>();
+
 		for (USkillNodeBase*& Node : SkillTreeNodes) //for each skillnode we have taken
 		{
 			for (TMap<TSubclassOf<UGE_Affix>, int32>::TIterator it = Node->NodeAffixes.CreateIterator(); it; ++it) //for each affix on the node
