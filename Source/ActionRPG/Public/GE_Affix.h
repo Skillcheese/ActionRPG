@@ -22,5 +22,11 @@ UCLASS()
 class ACTIONRPG_API UGE_Affix : public UGameplayEffect
 {
 	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Affix)
+	FString Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Affix)
+	FString DescriptionB;
 };
 
