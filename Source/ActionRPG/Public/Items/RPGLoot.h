@@ -38,4 +38,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Item)
 	int32 UpdateItemCount(int32 Count);
+
+	UFUNCTION(BlueprintCallable, Category = Item)
+	int32 SetItemLevel(int32 NewLevel);
+
+	UFUNCTION(BlueprintCallable, Category = Item)
+	int32 UpdateItemLevel(int32 Amount);
 };

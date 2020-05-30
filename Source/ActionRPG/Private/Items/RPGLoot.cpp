@@ -30,3 +30,13 @@ int32 URPGLoot::UpdateItemCount(int32 Count)
 {
 	return Data.UpdateItemCountLevel(Count);
 }
+
+int32 URPGLoot::SetItemLevel(int32 NewLevel)
+{
+	return Data.ItemLevel = NewLevel;
+}
+
+int32 URPGLoot::UpdateItemLevel(int32 Amount)
+{
+	return SetItemLevel(Data.ItemLevel + Amount);
+}
