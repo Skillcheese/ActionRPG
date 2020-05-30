@@ -54,6 +54,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Max)
 	int32 MaxLevel;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
+	int32 DefaultStartingLevel;
+
 	/** Ability to grant if this item is slotted */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
 	TSubclassOf<URPGGameplayAbility> GrantedAbility;
