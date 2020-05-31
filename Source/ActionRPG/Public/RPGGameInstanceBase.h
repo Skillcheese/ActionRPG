@@ -73,7 +73,7 @@ public:
 	void ResetSaveGame();
 
 	UFUNCTION(BlueprintCallable, Category = Item)
-	URPGLoot* CreateItem(URPGItem* BaseType);
+	URPGLoot* CreateItem(URPGItem* BaseType, int32 ItemLevel = 0);
 
 protected:
 	/** The current save game object */

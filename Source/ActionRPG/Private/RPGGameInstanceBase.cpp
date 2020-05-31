@@ -99,7 +99,7 @@ void URPGGameInstanceBase::ResetSaveGame()
 	bSavingEnabled = bWasSavingEnabled;
 }
 
-URPGLoot * URPGGameInstanceBase::CreateItem(URPGItem* BaseType)
+URPGLoot * URPGGameInstanceBase::CreateItem(URPGItem* BaseType, int32 ItemLevel)
 {
 	if (!BaseType)
 	{
@@ -107,6 +107,6 @@ URPGLoot * URPGGameInstanceBase::CreateItem(URPGItem* BaseType)
 	}
 	URPGLoot* Item = NewObject<URPGLoot>(this);
 	Item->BaseType = BaseType;
-	Item->Data = FRPGItemData();
+	Item->Data = FRPGItemData(ItemLevel);
 	return Item;
 }

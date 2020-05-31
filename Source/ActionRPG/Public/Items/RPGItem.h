@@ -27,6 +27,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Item)
 	FPrimaryAssetType ItemType;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Item)
+	TMap<TSubclassOf<UGE_Affix>, int32> BaseEnchants;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
 	bool Stackable;
 
@@ -53,6 +56,9 @@ public:
 	/** Maximum level this item can be, <= 0 means infinite */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Max)
 	int32 MaxLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
+	int32 DefaultStartingLevel;
 
 	/** Ability to grant if this item is slotted */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)

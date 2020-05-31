@@ -14,8 +14,9 @@ bool ARPGPlayerControllerBase::AddInventoryItem(URPGLoot* NewItem, int32 count, 
 		UE_LOG(LogActionRPG, Warning, TEXT("AddInventoryItem: Failed trying to add null item!"));
 		return false;
 	}
-
-	if (NewItem->GetItemCount() < 0 || NewItem->Data.ItemLevel < 0)
+	int32 a = NewItem->GetItemCount();
+	int32 b = NewItem->Data.ItemLevel;
+	if (a < 0 || b < 0)
 	{
 		UE_LOG(LogActionRPG, Warning, TEXT("AddInventoryItem: Failed trying to add item %s with negative count or level!"), *NewItem->GetName());
 		return false;

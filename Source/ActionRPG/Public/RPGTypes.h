@@ -75,7 +75,7 @@ struct ACTIONRPG_API FRPGItemData
 		/** Constructor, default to count/level 1 so declaring them in blueprints gives you the expected behavior */
 	FRPGItemData()
 		: ItemCount(0)
-		, ItemLevel(1)
+		, ItemLevel(0)
 	{
 		PrefixMap = TMap<TSubclassOf<UGE_Affix>, int32>();
 		SuffixMap = TMap<TSubclassOf<UGE_Affix>, int32>();
@@ -85,6 +85,16 @@ struct ACTIONRPG_API FRPGItemData
 
 	FRPGItemData(int32 InItemCount, int32 InItemLevel)
 		: ItemCount(InItemCount)
+		, ItemLevel(InItemLevel)
+	{
+		PrefixMap = TMap<TSubclassOf<UGE_Affix>, int32>();
+		SuffixMap = TMap<TSubclassOf<UGE_Affix>, int32>();
+		ImplicitMap = TMap<TSubclassOf<UGE_Affix>, int32>();
+		EnchantMap = TMap<TSubclassOf<UGE_Affix>, int32>();
+	}
+
+	FRPGItemData(int32 InItemLevel)
+		: ItemCount(0)
 		, ItemLevel(InItemLevel)
 	{
 		PrefixMap = TMap<TSubclassOf<UGE_Affix>, int32>();
@@ -164,7 +174,7 @@ struct ACTIONRPG_API FRPGItemData
 		ItemCount = FMath::Max(ItemCount + OtherItemCount, 0);
 		if (OtherItemLevel != -1)
 		{
-			ItemLevel = FMath::Max(FMath::Max(OtherItemLevel, 1), ItemLevel);
+			ItemLevel = FMath::Max3(OtherItemLevel, 1, ItemLevel);
 		}
 		return ItemCount;
 	}
