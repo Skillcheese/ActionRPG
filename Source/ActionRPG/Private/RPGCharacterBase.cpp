@@ -334,11 +334,8 @@ bool ARPGCharacterBase::SetCharacterLevel(int32 NewLevel)
 	if (CharacterLevel != NewLevel && NewLevel > 0)
 	{
 		// Our level changed so we need to refresh abilities
-		RemoveStartupGameplayAbilities();
 		CharacterLevel = NewLevel;
-		AddStartupGameplayAbilities();
-
-		return true;
+		return RefreshEffects();
 	}
 	return false;
 }
