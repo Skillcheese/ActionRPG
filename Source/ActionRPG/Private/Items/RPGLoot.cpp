@@ -21,6 +21,11 @@ int32 URPGLoot::GetItemCount()
 	return Data.ItemCount;
 }
 
+int32 URPGLoot::GetItemLevel()
+{
+	return Data.ItemLevel;
+}
+
 int32 URPGLoot::SetItemCount(int32 Count)
 {
 	return UpdateItemCount(Count - Data.ItemCount);
