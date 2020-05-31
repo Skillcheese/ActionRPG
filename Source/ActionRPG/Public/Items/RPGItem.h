@@ -27,6 +27,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Item)
 	FPrimaryAssetType ItemType;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Item)
+	TMap<TSubclassOf<UGE_Affix>, int32> BaseEnchants;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
 	bool Stackable;
 

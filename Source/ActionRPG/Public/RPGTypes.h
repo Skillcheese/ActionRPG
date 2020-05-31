@@ -94,7 +94,8 @@ struct ACTIONRPG_API FRPGItemData
 	}
 
 	FRPGItemData(int32 InItemLevel)
-		: ItemLevel(InItemLevel)
+		: ItemCount(0)
+		, ItemLevel(InItemLevel)
 	{
 		PrefixMap = TMap<TSubclassOf<UGE_Affix>, int32>();
 		SuffixMap = TMap<TSubclassOf<UGE_Affix>, int32>();
@@ -173,7 +174,7 @@ struct ACTIONRPG_API FRPGItemData
 		ItemCount = FMath::Max(ItemCount + OtherItemCount, 0);
 		if (OtherItemLevel != -1)
 		{
-			ItemLevel = FMath::Max(FMath::Max(OtherItemLevel, 1), ItemLevel);
+			ItemLevel = FMath::Max3(OtherItemLevel, 1, ItemLevel);
 		}
 		return ItemCount;
 	}
