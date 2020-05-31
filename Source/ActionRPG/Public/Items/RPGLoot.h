@@ -33,6 +33,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = Item)
 	int32 GetItemCount();
 
+	UFUNCTION(BlueprintPure, Category = Item)
+	int32 GetItemLevel();
+
 	UFUNCTION(BlueprintCallable, Category = Item)
 	int32 SetItemCount(int32 Count);
 
