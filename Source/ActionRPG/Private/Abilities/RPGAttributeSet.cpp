@@ -35,6 +35,9 @@ URPGAttributeSet::URPGAttributeSet()
 	, ColdDamage(0.0f)
 	, LightningDamage(0.0f)
 	, ChaosDamage(0.0f)
+	//Misc
+	, Duration(1.f)
+	, AreaOfEffect(1.f)
 {
 }
 
@@ -69,6 +72,9 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, ColdDamage);
 	DOREPLIFETIME(URPGAttributeSet, LightningDamage);
 	DOREPLIFETIME(URPGAttributeSet, ChaosDamage);
+	//Misc
+	DOREPLIFETIME(URPGAttributeSet, Duration);
+	DOREPLIFETIME(URPGAttributeSet, AreaOfEffect);
 }
 
 void URPGAttributeSet::OnRep_Health()
@@ -184,6 +190,16 @@ void URPGAttributeSet::OnRep_LightningDamage()
 void URPGAttributeSet::OnRep_ChaosDamage()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosDamage);
+}
+
+void URPGAttributeSet::OnRep_Duration()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, Duration);
+}
+
+void URPGAttributeSet::OnRep_AreaOfEffect()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AreaOfEffect);
 }
 
 void URPGAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)

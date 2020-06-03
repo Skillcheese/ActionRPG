@@ -324,6 +324,11 @@ float ARPGCharacterBase::GetMoveSpeed() const
 	return AttributeSet->GetMoveSpeed();
 }
 
+float ARPGCharacterBase::GetDuration() const
+{
+	return AttributeSet->GetDuration();
+}
+
 int32 ARPGCharacterBase::GetCharacterLevel() const
 {
 	return CharacterLevel;

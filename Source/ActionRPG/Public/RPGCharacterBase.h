@@ -57,6 +57,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual float GetMoveSpeed() const;
 
+	UFUNCTION(BlueprintCallable)
+	virtual float GetDuration() const;
+
 	/** Returns the character level that is passed to the ability system */
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const;
