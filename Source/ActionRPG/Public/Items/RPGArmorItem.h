@@ -16,4 +16,7 @@ class ACTIONRPG_API URPGArmorItem : public URPGItem
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Armor)
+	TArray<FName> SectionsToHide;
 };
