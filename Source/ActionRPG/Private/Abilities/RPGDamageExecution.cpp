@@ -20,6 +20,8 @@ struct RPGDamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(ColdDamagePercent);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningDamagePercent);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(ChaosDamagePercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(DamageOverTimeDamage);
+
 	//flat damage numbers
 	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalDamage);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(FireDamage);
@@ -31,7 +33,7 @@ struct RPGDamageStatics
 
 	RPGDamageStatics()
 	{
-		// Capture the Target's DefensePower attribute. Do not snapshot it, because we want to use the health value at the moment we apply the execution.
+		//Defensive target attributes, not snapshotted - false
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, GlobalDamageReductionPercent, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, PhysicalResistancePercent, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, FireResistancePercent, Target, false);
@@ -39,15 +41,16 @@ struct RPGDamageStatics
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, LightningResistancePercent, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosResistancePercent, Target, false);
 
-		//my definitions, snapshotted so it takes the value on launch, not on hit
+		//Source Offensive Attriutes, snapshotted so it takes the value on launch, not on hit
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, GlobalDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, PhysicalDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, FireDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ColdDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, LightningDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosDamagePercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, DamageOverTimeDamage, Source, true);
 
-		//my definitions, snapshotted so it takes the value on launch, not on hit
+		//Source Damage Attributes, snapshotted so it takes the value on launch, not on hit
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, PhysicalDamage, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, FireDamage, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ColdDamage, Source, true);
@@ -66,27 +69,34 @@ static const RPGDamageStatics& DamageStatics()
 
 URPGDamageExecution::URPGDamageExecution()
 {
-	RelevantAttributesToCapture.Add(DamageStatics().GlobalDamageReductionPercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().PhysicalResistancePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().FireResistancePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().ColdResistancePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().LightningResistancePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().ChaosResistancePercentDef);
+	//Target defensive
+#define CAP(Name) \
+	RelevantAttributesToCapture.Add(DamageStatics().Name##Def)
+
+	CAP(GlobalDamageReductionPercent);
+	CAP(PhysicalResistancePercent);
+	CAP(FireResistancePercent);
+	CAP(ColdResistancePercent);
+	CAP(LightningResistancePercent);
+	CAP(ChaosResistancePercent);
 	
-	RelevantAttributesToCapture.Add(DamageStatics().GlobalDamagePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().PhysicalDamagePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().FireDamagePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().ColdDamagePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().LightningDamagePercentDef);
-	RelevantAttributesToCapture.Add(DamageStatics().ChaosDamagePercentDef);
+	//Source Offensive
+	CAP(GlobalDamagePercent);
+	CAP(PhysicalDamagePercent);
+	CAP(FireDamagePercent);
+	CAP(ColdDamagePercent);
+	CAP(LightningDamagePercent);
+	CAP(ChaosDamagePercent);
+	CAP(DamageOverTimeDamage);
 
-	RelevantAttributesToCapture.Add(DamageStatics().PhysicalDamageDef);
-	RelevantAttributesToCapture.Add(DamageStatics().FireDamageDef);
-	RelevantAttributesToCapture.Add(DamageStatics().ColdDamageDef);
-	RelevantAttributesToCapture.Add(DamageStatics().LightningDamageDef);
-	RelevantAttributesToCapture.Add(DamageStatics().ChaosDamageDef);
+	//Source Damage 
+	CAP(PhysicalDamage);
+	CAP(FireDamage);
+	CAP(ColdDamage);
+	CAP(LightningDamage);
+	CAP(ChaosDamage);
 
-	RelevantAttributesToCapture.Add(DamageStatics().DamageDef);
+	CAP(Damage);
 }
 
 void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
@@ -98,6 +108,8 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	AActor* TargetActor = TargetAbilitySystemComponent ? TargetAbilitySystemComponent->AvatarActor : nullptr;
 
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
+	FGameplayTagContainer SpecTags;
+	Spec.GetAllAssetTags(SpecTags);
 
 	// Gather the tags from the source and target as that can affect which buffs should be used
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
@@ -106,62 +118,70 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	FAggregatorEvaluateParameters EvaluationParameters;
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
+	
+	/******************************************************************************
+	DAMAGE OVER TIME
+	*******************************************************************************/
+	//Will Only be applied if ability is tagged with damage over time
+	float DamageOverTimeDamage = 1.f;
+#define CAPTURE(Name) \
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().Name##Def, EvaluationParameters, Name)
 
-	// --------------------------------------
-	//	Damage Done = Damage * AttackPower / DefensePower
-	//	If DefensePower is 0, it is treated as 1.0
-	// --------------------------------------
+	if (SpecTags.HasTag(FGameplayTag::RequestGameplayTag(FName("Ability.Damage.DamageOverTime"))))
+	{
+		CAPTURE(DamageOverTimeDamage);
+	}
 
 	float GlobalDamageReductionPercent = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().GlobalDamageReductionPercentDef, EvaluationParameters, GlobalDamageReductionPercent);
+	CAPTURE(GlobalDamageReductionPercent);
 
 	float PhysicalResistancePercent = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().PhysicalResistancePercentDef, EvaluationParameters, PhysicalResistancePercent);
+	CAPTURE(PhysicalResistancePercent);
 
 	float FireResistancePercent= 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().FireResistancePercentDef, EvaluationParameters, FireResistancePercent);
+	CAPTURE(FireResistancePercent);
 
 	float ColdResistancePercent = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ColdResistancePercentDef, EvaluationParameters, ColdResistancePercent);
+	CAPTURE(ColdResistancePercent);
 
 	float LightningResistancePercent = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().LightningResistancePercentDef, EvaluationParameters, LightningResistancePercent);
+	CAPTURE(LightningResistancePercent);
 
 	float ChaosResistancePercent = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ChaosResistancePercentDef, EvaluationParameters, ChaosResistancePercent);
+	CAPTURE(ChaosResistancePercent);
 
 	float GlobalDamagePercent= 1.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().GlobalDamagePercentDef, EvaluationParameters, GlobalDamagePercent);
+	CAPTURE(GlobalDamagePercent);
 
 	float PhysicalDamagePercent= 1.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().PhysicalDamagePercentDef, EvaluationParameters, PhysicalDamagePercent);
+	CAPTURE(PhysicalDamagePercent);
 
 	float FireDamagePercent= 1.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().FireDamagePercentDef, EvaluationParameters, FireDamagePercent);
+	CAPTURE(FireDamagePercent);
 
 	float ColdDamagePercent = 1.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ColdDamagePercentDef, EvaluationParameters, ColdDamagePercent);
+	CAPTURE(ColdDamagePercent);
 
 	float LightningDamagePercent = 1.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().LightningDamagePercentDef, EvaluationParameters, LightningDamagePercent);
+	CAPTURE(LightningDamagePercent);
 
 	float ChaosDamagePercent = 1.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ChaosDamagePercentDef, EvaluationParameters, ChaosDamagePercent);
+	CAPTURE(ChaosDamagePercent);
 
 	float PhysicalDamage= 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().PhysicalDamageDef, EvaluationParameters, PhysicalDamage);
+	CAPTURE(PhysicalDamage);
 
 	float FireDamage= 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().FireDamageDef, EvaluationParameters, FireDamage);
+	CAPTURE(FireDamage);
 
 	float ColdDamage = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ColdDamageDef, EvaluationParameters, ColdDamage);
+	CAPTURE(ColdDamage);
 
 	float LightningDamage = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().LightningDamageDef, EvaluationParameters, LightningDamage);
+	CAPTURE(LightningDamage);
 
 	float ChaosDamage = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ChaosDamageDef, EvaluationParameters, ChaosDamage);
+	CAPTURE(ChaosDamage);
 
 	float PhysicalDamageDone = PhysicalDamage * PhysicalDamagePercent * (1 - PhysicalResistancePercent);
 	float FireDamageDone = FireDamage * FireDamagePercent  * (1 - FireResistancePercent);
@@ -170,6 +190,7 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	float ChaosDamageDone = ChaosDamage * ChaosDamagePercent * (1 - ChaosResistancePercent);
 	float TotalDamageDone = PhysicalDamageDone + FireDamageDone + ColdDamageDone + LightningDamageDone + ChaosDamageDone;
 	TotalDamageDone *= GlobalDamagePercent * (1 - GlobalDamageReductionPercent);
+	TotalDamageDone *= DamageOverTimeDamage;
 	if (TotalDamageDone > 0.f)
 	{
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(DamageStatics().DamageProperty, EGameplayModOp::Additive, TotalDamageDone));

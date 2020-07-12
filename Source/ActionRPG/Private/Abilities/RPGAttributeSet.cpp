@@ -15,13 +15,17 @@ URPGAttributeSet::URPGAttributeSet()
 	, MoveSpeed(1.0f)
 	, Damage(0.0f)
 
-	//Defensive
+	/**********************************************************************************************************
+	Defensive properties
+	**********************************************************************************************************/
 	, GlobalDamageReductionPercent(0.0f)
 	, PhysicalResistancePercent(0.0f)
 	, FireResistancePercent(0.0f)
 	, ColdResistancePercent(0.0f)
 	, LightningResistancePercent(0.0f)
 	, ChaosResistancePercent(0.0f)
+	, DodgeEffectiveness(0.0f)
+	, BlockEffectiveness(0.0f)
 	//Offensive
 	, GlobalDamagePercent(1.f)
 	, PhysicalDamagePercent(1.f)
@@ -29,6 +33,7 @@ URPGAttributeSet::URPGAttributeSet()
 	, ColdDamagePercent(1.f)
 	, LightningDamagePercent(1.f)
 	, ChaosDamagePercent(1.f)
+	, DamageOverTimeDamage(1.f)
 	//Results
 	, PhysicalDamage(0.0f)
 	, FireDamage(0.0f)
@@ -52,29 +57,45 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, ManaRegen);
 	DOREPLIFETIME(URPGAttributeSet, MoveSpeed);
 
-	//Offensive
+	/**********************************************************************************************************
+	Defensive properties
+	**********************************************************************************************************/
 	DOREPLIFETIME(URPGAttributeSet, GlobalDamageReductionPercent);
 	DOREPLIFETIME(URPGAttributeSet, PhysicalResistancePercent);
 	DOREPLIFETIME(URPGAttributeSet, FireResistancePercent);
 	DOREPLIFETIME(URPGAttributeSet, ColdResistancePercent);
 	DOREPLIFETIME(URPGAttributeSet, LightningResistancePercent);
 	DOREPLIFETIME(URPGAttributeSet, ChaosResistancePercent);
-	//Defensive
+	DOREPLIFETIME(URPGAttributeSet, DodgeEffectiveness);
+	DOREPLIFETIME(URPGAttributeSet, BlockEffectiveness);
+
+	/**********************************************************************************************************
+	Offensive properties
+	**********************************************************************************************************/
+
 	DOREPLIFETIME(URPGAttributeSet, GlobalDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, PhysicalDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, FireDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, ColdDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, LightningDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, ChaosDamagePercent);
-	//Results
+	DOREPLIFETIME(URPGAttributeSet, DamageOverTimeDamage);
+	
+	/**********************************************************************************************************
+	Misc properties, like duration/area of effect
+	**********************************************************************************************************/
+	DOREPLIFETIME(URPGAttributeSet, Duration);
+	DOREPLIFETIME(URPGAttributeSet, AreaOfEffect);
+
+	/**********************************************************************************************************
+	Result properties, don't modify these directly
+	**********************************************************************************************************/
+
 	DOREPLIFETIME(URPGAttributeSet, PhysicalDamage);
 	DOREPLIFETIME(URPGAttributeSet, FireDamage);
 	DOREPLIFETIME(URPGAttributeSet, ColdDamage);
 	DOREPLIFETIME(URPGAttributeSet, LightningDamage);
 	DOREPLIFETIME(URPGAttributeSet, ChaosDamage);
-	//Misc
-	DOREPLIFETIME(URPGAttributeSet, Duration);
-	DOREPLIFETIME(URPGAttributeSet, AreaOfEffect);
 }
 
 void URPGAttributeSet::OnRep_Health()
@@ -107,6 +128,9 @@ void URPGAttributeSet::OnRep_MoveSpeed()
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MoveSpeed);
 }
 
+/**********************************************************************************************************
+Defensive properties
+**********************************************************************************************************/
 void URPGAttributeSet::OnRep_GlobalDamageReductionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, GlobalDamageReductionPercent);
@@ -136,6 +160,20 @@ void URPGAttributeSet::OnRep_ChaosResistancePercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosResistancePercent);
 }
+
+void URPGAttributeSet::OnRep_DodgeEffectiveness()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DodgeEffectiveness);
+}
+
+void URPGAttributeSet::OnRep_BlockEffectiveness()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, BlockEffectiveness);
+}
+
+/**********************************************************************************************************
+Offensive properties
+**********************************************************************************************************/
 
 void URPGAttributeSet::OnRep_GlobalDamagePercent()
 {
@@ -191,6 +229,15 @@ void URPGAttributeSet::OnRep_ChaosDamage()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosDamage);
 }
+
+void URPGAttributeSet::OnRep_DamageOverTimeDamage()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DamageOverTimeDamage);
+}
+
+/**********************************************************************************************************
+Misc properties, like duration/area of effect
+**********************************************************************************************************/
 
 void URPGAttributeSet::OnRep_Duration()
 {

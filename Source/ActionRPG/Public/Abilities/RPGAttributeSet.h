@@ -91,6 +91,15 @@ public:
 	FGameplayAttributeData ChaosResistancePercent;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosResistancePercent)
 
+	UPROPERTY(BlueprintReadOnly, Category = "Dodge", ReplicatedUsing = OnRep_DodgeEffectiveness)
+	FGameplayAttributeData DodgeEffectiveness;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, DodgeEffectiveness)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Block", ReplicatedUsing = OnRep_BlockEffectiveness)
+	FGameplayAttributeData BlockEffectiveness;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, BlockEffectiveness)
+		
+
 	/**********************************************************************************************************
 	Offensive properties
 	**********************************************************************************************************/
@@ -118,6 +127,17 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Chaos Damage", ReplicatedUsing = OnRep_ChaosDamagePercent)
 	FGameplayAttributeData ChaosDamagePercent;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosDamagePercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Magic Damage", ReplicatedUsing = OnRep_MagicDamagePercent)
+	FGameplayAttributeData MagicDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MagicDamagePercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Over Time", ReplicatedUsing = OnRep_DamageOverTimeDamage)
+	FGameplayAttributeData DamageOverTimeDamage;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, DamageOverTimeDamage)
+
+
+		
 
 	/**********************************************************************************************************
 	Misc properties, like duration/area of effect
@@ -178,6 +198,9 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_MoveSpeed();
 	
+	/**********************************************************************************************************
+	Defensive properties
+	**********************************************************************************************************/
 	UFUNCTION()
 	virtual void OnRep_GlobalDamageReductionPercent();
 	
@@ -197,6 +220,15 @@ protected:
 	virtual void OnRep_ChaosResistancePercent();
 
 	UFUNCTION()
+	virtual void OnRep_DodgeEffectiveness();
+
+	UFUNCTION()
+	virtual void OnRep_BlockEffectiveness();
+
+	/**********************************************************************************************************
+	Offensive properties
+	**********************************************************************************************************/
+	UFUNCTION()
 	virtual void OnRep_GlobalDamagePercent();
 
 	UFUNCTION()
@@ -215,6 +247,22 @@ protected:
 	virtual void OnRep_ChaosDamagePercent();
 
 	UFUNCTION()
+	virtual void OnRep_DamageOverTimeDamage();
+
+	/**********************************************************************************************************
+	Misc properties, like duration/area of effect
+	**********************************************************************************************************/
+	UFUNCTION()
+	virtual void OnRep_Duration();
+
+	UFUNCTION()
+	virtual void OnRep_AreaOfEffect();
+
+	/**********************************************************************************************************
+	Result properties, don't modify these directly
+	**********************************************************************************************************/
+
+	UFUNCTION()
 	virtual void OnRep_PhysicalDamage();
 
 	UFUNCTION()
@@ -229,9 +277,4 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_ChaosDamage();
 
-	UFUNCTION()
-	virtual void OnRep_Duration();
-
-	UFUNCTION()
-	virtual void OnRep_AreaOfEffect();
 };
