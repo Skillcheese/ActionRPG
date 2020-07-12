@@ -26,6 +26,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GameplayEffects)
 	TMap<FGameplayTag, FRPGGameplayEffectContainer> EffectContainerMap;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GameplayEffects)
+	float WeaponDamageScaling;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GameplayEffects)
+	TArray<int32> AllowedWeaponTypes;
+
 	/** Make gameplay effect container spec to be applied later, using the passed in container */
 	UFUNCTION(BlueprintCallable, Category = Ability, meta=(AutoCreateRefTerm = "EventData"))
 	virtual FRPGGameplayEffectContainerSpec MakeEffectContainerSpecFromContainer(const FRPGGameplayEffectContainer& Container, const FGameplayEventData& EventData, int32 OverrideGameplayLevel = -1);

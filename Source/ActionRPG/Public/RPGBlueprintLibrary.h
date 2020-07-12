@@ -5,6 +5,7 @@
 #include "ActionRPG.h"
 #include "RPGTypes.h"
 #include "Abilities/RPGAbilityTypes.h"
+#include "RPGGameplayAbility.h"
 #include "RPGBlueprintLibrary.generated.h"
 
 /**
@@ -60,4 +61,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = Ability)
 	static FString MyGameplayEffectToString(const TSubclassOf<UGameplayEffect> Effect, int32 Level = 1);
 
+	UFUNCTION(BlueprintPure, Category = Ability)
+	static FString MyGameplayAbilityToString(const TSubclassOf<URPGGameplayAbility> Ability, int32 Level = 1);
+
+private:
+	static FString TagToString(FGameplayTag Tag);
 };
