@@ -120,6 +120,18 @@ public:
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosDamagePercent)
 
 	/**********************************************************************************************************
+	Misc properties, like duration/area of effect
+	**********************************************************************************************************/
+
+	UPROPERTY(BlueprintReadOnly, Category = "Duration", ReplicatedUsing = OnRep_Duration)
+	FGameplayAttributeData Duration;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, Duration)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Area of Effect", ReplicatedUsing = OnRep_AreaOfEffect)
+	FGameplayAttributeData AreaOfEffect;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AreaOfEffect)
+
+	/**********************************************************************************************************
 	Result properties, don't modify these directly
 	**********************************************************************************************************/
 
@@ -143,18 +155,6 @@ public:
 	FGameplayAttributeData ChaosDamage;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosDamage)
 
-	/**********************************************************************************************************
-	Misc properties, like duration/area of effect
-	**********************************************************************************************************/
-
-	UPROPERTY(BlueprintReadOnly, Category = "Duration", ReplicatedUsing = OnRep_Duration)
-	FGameplayAttributeData Duration;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, Duration)
-
-	UPROPERTY(BlueprintReadOnly, Category = "Area of Effect", ReplicatedUsing = OnRep_AreaOfEffect)
-	FGameplayAttributeData AreaOfEffect;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AreaOfEffect)
-
 protected:
 	/** Helper function to proportionally adjust the value of an attribute when it's associated max attribute changes. (i.e. When MaxHealth increases, Health increases by an amount that maintains the same percentage as before) */
 	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
@@ -177,10 +177,10 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_MoveSpeed();
-
+	
 	UFUNCTION()
 	virtual void OnRep_GlobalDamageReductionPercent();
-
+	
 	UFUNCTION()
 	virtual void OnRep_PhysicalResistancePercent();
 
