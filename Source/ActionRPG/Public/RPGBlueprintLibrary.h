@@ -56,4 +56,8 @@ public:
 	/** Applies container spec that was made from an ability */
 	UFUNCTION(BlueprintCallable, Category = Ability)
 	static TArray<FActiveGameplayEffectHandle> ApplyExternalEffectContainerSpec(const FRPGGameplayEffectContainerSpec& ContainerSpec);
+
+	UFUNCTION(BlueprintPure, Category = Ability)
+	static FString MyGameplayEffectToString(const TSubclassOf<UGameplayEffect> Effect, int32 Level = 1);
+
 };

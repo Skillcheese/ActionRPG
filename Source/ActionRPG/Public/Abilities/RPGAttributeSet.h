@@ -247,6 +247,9 @@ protected:
 	virtual void OnRep_ChaosDamagePercent();
 
 	UFUNCTION()
+	virtual void OnRep_MagicDamagePercent();
+
+	UFUNCTION()
 	virtual void OnRep_DamageOverTimeDamage();
 
 	/**********************************************************************************************************

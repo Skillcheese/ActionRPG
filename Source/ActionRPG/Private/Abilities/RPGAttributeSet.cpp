@@ -33,6 +33,7 @@ URPGAttributeSet::URPGAttributeSet()
 	, ColdDamagePercent(1.f)
 	, LightningDamagePercent(1.f)
 	, ChaosDamagePercent(1.f)
+	, MagicDamagePercent(1.f)
 	, DamageOverTimeDamage(1.f)
 	//Results
 	, PhysicalDamage(0.0f)
@@ -79,6 +80,7 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, ColdDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, LightningDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, ChaosDamagePercent);
+	DOREPLIFETIME(URPGAttributeSet, MagicDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, DamageOverTimeDamage);
 	
 	/**********************************************************************************************************
@@ -205,6 +207,34 @@ void URPGAttributeSet::OnRep_ChaosDamagePercent()
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosDamagePercent);
 }
 
+void URPGAttributeSet::OnRep_MagicDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MagicDamagePercent);
+}
+
+void URPGAttributeSet::OnRep_DamageOverTimeDamage()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DamageOverTimeDamage);
+}
+
+/**********************************************************************************************************
+Misc properties, like duration/area of effect
+**********************************************************************************************************/
+
+void URPGAttributeSet::OnRep_Duration()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, Duration);
+}
+
+void URPGAttributeSet::OnRep_AreaOfEffect()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AreaOfEffect);
+}
+
+/**********************************************************************************************************
+Result properties, don't modify these directly
+**********************************************************************************************************/
+
 void URPGAttributeSet::OnRep_PhysicalDamage()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalDamage);
@@ -228,25 +258,6 @@ void URPGAttributeSet::OnRep_LightningDamage()
 void URPGAttributeSet::OnRep_ChaosDamage()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosDamage);
-}
-
-void URPGAttributeSet::OnRep_DamageOverTimeDamage()
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DamageOverTimeDamage);
-}
-
-/**********************************************************************************************************
-Misc properties, like duration/area of effect
-**********************************************************************************************************/
-
-void URPGAttributeSet::OnRep_Duration()
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, Duration);
-}
-
-void URPGAttributeSet::OnRep_AreaOfEffect()
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AreaOfEffect);
 }
 
 void URPGAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)

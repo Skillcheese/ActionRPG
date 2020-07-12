@@ -76,3 +76,65 @@ TArray<FActiveGameplayEffectHandle> URPGBlueprintLibrary::ApplyExternalEffectCon
 	}
 	return AllEffects;
 }
+
+FString URPGBlueprintLibrary::MyGameplayEffectToString(const TSubclassOf<UGameplayEffect> Effect, int32 Level)
+{
+	FString DamageTypesString = "";
+	FString TagsString = "Tags: ";
+	UGameplayEffect* DefaultEffectObject = Effect.GetDefaultObject();
+	
+	bool isDamageOverTime = DefaultEffectObject->InheritableGameplayEffectTags.Added.HasTag(FGameplayTag::RequestGameplayTag(FName("Ability.Damage.DamageOverTime")));
+	if (isDamageOverTime)
+	{
+		TagsString.Append("Damage Over Time");
+	}
+	TArray<FString> DamageNames = TArray<FString>();
+	DamageNames.Add("PhysicalDamage");
+	DamageNames.Add("FireDamage");
+	DamageNames.Add("ColdDamage");
+	DamageNames.Add("LightningDamage");
+	DamageNames.Add("ChaosDamage");
+	for (FGameplayEffectExecutionDefinition Execution : DefaultEffectObject->Executions)
+	{
+		for (FGameplayEffectExecutionScopedModifierInfo Modifier : Execution.CalculationModifiers)
+		{
+			FString name = Modifier.CapturedAttribute.AttributeToCapture.AttributeName;
+			if (DamageNames.Contains(name))
+			{
+				if (name == "PhysicalDamage")
+				{
+					DamageTypesString.Append("Physical");
+				}
+				else if (name == "FireDamage")
+				{
+					DamageTypesString.Append("Fire");
+				}
+				else if (name == "ColdDamage")
+				{
+					DamageTypesString.Append("Cold");
+				}
+				else if (name == "LightningDamage")
+				{
+					DamageTypesString.Append("lightning");
+				}
+				else if (name == "ChaosDamage")
+				{
+					DamageTypesString.Append("Chaos");
+				}
+
+				float OutMagnitude = 0.f;
+				if (Modifier.ModifierMagnitude.GetStaticMagnitudeIfPossible(Level, OutMagnitude))
+				{
+					DamageTypesString.Append(" ");
+					DamageTypesString.Append(FString::SanitizeFloat(OutMagnitude));
+					DamageTypesString.Append("\n");
+				}
+				else
+				{
+					DamageTypesString.Append("Failed to get magnitude");
+				}
+			}
+		}
+	}
+	return TagsString + "\n" + DamageTypesString;
+}
