@@ -128,16 +128,57 @@ public:
 	FGameplayAttributeData ChaosDamagePercent;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosDamagePercent)
 
+	UPROPERTY(BlueprintReadOnly, Category = "Critical Hit Damage", ReplicatedUsing = OnRep_CriticalHitDamagePercent)
+	FGameplayAttributeData CriticalHitDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, CriticalHitDamagePercent)
+
+	/**********************************************************************************************************
+	Conditional Damage
+	**********************************************************************************************************/
+
 	UPROPERTY(BlueprintReadOnly, Category = "Magic Damage", ReplicatedUsing = OnRep_MagicDamagePercent)
 	FGameplayAttributeData MagicDamagePercent;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MagicDamagePercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Melee Damage", ReplicatedUsing = OnRep_MeleeDamagePercent)
+	FGameplayAttributeData MeleeDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MeleeDamagePercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack Damage", ReplicatedUsing = OnRep_AttackDamagePercent)
+	FGameplayAttributeData AttackDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AttackDamagePercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Spell Damage", ReplicatedUsing = OnRep_SpellDamagePercent)
+	FGameplayAttributeData SpellDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SpellDamagePercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Projectile Damage", ReplicatedUsing = OnRep_ProjectileDamagePercent)
+	FGameplayAttributeData ProjectileDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ProjectileDamagePercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ranged Damage", ReplicatedUsing = OnRep_RangedDamagePercent)
+	FGameplayAttributeData RangedDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, RangedDamagePercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Minion Damage", ReplicatedUsing = OnRep_MinionDamagePercent)
+	FGameplayAttributeData MinionDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MinionDamagePercent)
 
 	UPROPERTY(BlueprintReadOnly, Category = "Damage Over Time", ReplicatedUsing = OnRep_DamageOverTimeDamage)
 	FGameplayAttributeData DamageOverTimeDamage;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, DamageOverTimeDamage)
 
+	UPROPERTY(BlueprintReadOnly, Category = "Area Damage", ReplicatedUsing = OnRep_AreaDamagePercent)
+	FGameplayAttributeData AreaDamagePercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AreaDamagePercent)
 
-		
+	/**********************************************************************************************************
+	Elemental Conversion
+	**********************************************************************************************************/
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_PhysicalToFireConversionPercent)
+	FGameplayAttributeData PhysicalToFireConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, PhysicalToFireConversionPercent)
 
 	/**********************************************************************************************************
 	Misc properties, like duration/area of effect
@@ -247,10 +288,46 @@ protected:
 	virtual void OnRep_ChaosDamagePercent();
 
 	UFUNCTION()
+	virtual void OnRep_CriticalHitDamagePercent();
+
+	/**********************************************************************************************************
+	Conditional Damage
+	**********************************************************************************************************/
+
+	UFUNCTION()
 	virtual void OnRep_MagicDamagePercent();
 
 	UFUNCTION()
+	virtual void OnRep_MeleeDamagePercent();
+
+	UFUNCTION()
+	virtual void OnRep_AttackDamagePercent();
+
+	UFUNCTION()
+	virtual void OnRep_SpellDamagePercent();
+
+	UFUNCTION()
+	virtual void OnRep_ProjectileDamagePercent();
+
+	UFUNCTION()
+	virtual void OnRep_RangedDamagePercent();
+
+	UFUNCTION()
+	virtual void OnRep_MinionDamagePercent();
+
+	UFUNCTION()
 	virtual void OnRep_DamageOverTimeDamage();
+
+	UFUNCTION()
+	virtual void OnRep_AreaDamagePercent();
+
+
+	/**********************************************************************************************************
+	Elemental Conversion
+	**********************************************************************************************************/
+
+	UFUNCTION()
+	virtual void OnRep_PhysicalToFireConversionPercent();
 
 	/**********************************************************************************************************
 	Misc properties, like duration/area of effect

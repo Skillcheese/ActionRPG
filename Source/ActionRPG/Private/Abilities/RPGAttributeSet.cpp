@@ -33,8 +33,19 @@ URPGAttributeSet::URPGAttributeSet()
 	, ColdDamagePercent(1.f)
 	, LightningDamagePercent(1.f)
 	, ChaosDamagePercent(1.f)
+	, CriticalHitDamagePercent(1.f)
+	//Conditional
 	, MagicDamagePercent(1.f)
+	, MeleeDamagePercent(1.f)
+	, AttackDamagePercent(1.f)
+	, SpellDamagePercent(1.f)
+	, ProjectileDamagePercent(1.f)
+	, RangedDamagePercent(1.f)
+	, MinionDamagePercent(1.f)
 	, DamageOverTimeDamage(1.f)
+	, AreaDamagePercent(1.f)
+	//Conversion
+	, PhysicalToFireConversionPercent(0.f)
 	//Results
 	, PhysicalDamage(0.0f)
 	, FireDamage(0.0f)
@@ -80,8 +91,27 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, ColdDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, LightningDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, ChaosDamagePercent);
+	DOREPLIFETIME(URPGAttributeSet, CriticalHitDamagePercent);
+
+	/**********************************************************************************************************
+	Conditional Damage
+	**********************************************************************************************************/
+
 	DOREPLIFETIME(URPGAttributeSet, MagicDamagePercent);
+	DOREPLIFETIME(URPGAttributeSet, MeleeDamagePercent);
+	DOREPLIFETIME(URPGAttributeSet, AttackDamagePercent);
+	DOREPLIFETIME(URPGAttributeSet, SpellDamagePercent);
+	DOREPLIFETIME(URPGAttributeSet, ProjectileDamagePercent);
+	DOREPLIFETIME(URPGAttributeSet, RangedDamagePercent);
+	DOREPLIFETIME(URPGAttributeSet, MinionDamagePercent);
 	DOREPLIFETIME(URPGAttributeSet, DamageOverTimeDamage);
+	DOREPLIFETIME(URPGAttributeSet, AreaDamagePercent);
+
+	/**********************************************************************************************************
+	Elemental Conversion
+	**********************************************************************************************************/
+
+	DOREPLIFETIME(URPGAttributeSet, PhysicalToFireConversionPercent);
 	
 	/**********************************************************************************************************
 	Misc properties, like duration/area of effect
@@ -207,15 +237,69 @@ void URPGAttributeSet::OnRep_ChaosDamagePercent()
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosDamagePercent);
 }
 
+void URPGAttributeSet::OnRep_CriticalHitDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, CriticalHitDamagePercent);
+}
+
+/**********************************************************************************************************
+Conditional Damage
+**********************************************************************************************************/
+
 void URPGAttributeSet::OnRep_MagicDamagePercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MagicDamagePercent);
+}
+
+void URPGAttributeSet::OnRep_MeleeDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MeleeDamagePercent);
+}
+
+void URPGAttributeSet::OnRep_AttackDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AttackDamagePercent);
+}
+
+void URPGAttributeSet::OnRep_SpellDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SpellDamagePercent);
+}
+
+void URPGAttributeSet::OnRep_ProjectileDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ProjectileDamagePercent);
+}
+
+void URPGAttributeSet::OnRep_RangedDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, RangedDamagePercent);
+}
+
+void URPGAttributeSet::OnRep_MinionDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MinionDamagePercent);
 }
 
 void URPGAttributeSet::OnRep_DamageOverTimeDamage()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DamageOverTimeDamage);
 }
+
+void URPGAttributeSet::OnRep_AreaDamagePercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AreaDamagePercent);
+}
+
+/**********************************************************************************************************
+Elemental Conversion
+**********************************************************************************************************/
+
+void URPGAttributeSet::OnRep_PhysicalToFireConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToFireConversionPercent);
+}
+
 
 /**********************************************************************************************************
 Misc properties, like duration/area of effect
