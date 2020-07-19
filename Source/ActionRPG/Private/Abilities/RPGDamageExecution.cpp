@@ -67,7 +67,7 @@ struct RPGDamageStatics
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, AttackDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, SpellDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ProjectileDamagePercent, Source, true);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, RangedDamagePercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, RnagedDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, MinionDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, DamageOverTimeDamage, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, AreaDamagePercent, Source, true);
