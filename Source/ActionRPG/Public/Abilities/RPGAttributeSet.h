@@ -37,6 +37,10 @@ public:
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MaxHealth)
 
+	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_HealthRegen)
+	FGameplayAttributeData HealthRegen;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, HealthRegen)
+
 	/** Current Mana, used to execute special abilities. Capped by MaxMana */
 	UPROPERTY(BlueprintReadOnly, Category = "Mana", ReplicatedUsing=OnRep_Mana)
 	FGameplayAttributeData Mana;
@@ -332,6 +336,9 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_MaxHealth();
+
+	UFUNCTION()
+	virtual void OnRep_HealthRegen();
 
 	UFUNCTION()
 	virtual void OnRep_Mana();

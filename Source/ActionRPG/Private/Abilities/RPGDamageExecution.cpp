@@ -120,7 +120,7 @@ struct RPGDamageStatics
 		//Chaos Conversion
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToPhysicalConversionPercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToFireConversionPercent, Source, true);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToColConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToColdConversionPercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToLightningConversionPercent, Source, true);
 		//Weapon Damage
 		//DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, WeaponDamageSwordPercent, Source, true);
@@ -319,7 +319,7 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 
 	CONVERSION(FireToPhysical);
 	CONVERSION(FireToCold);
-	CONVERSION(FireToLighting);
+	CONVERSION(FireToLightning);
 	CONVERSION(FireToChaos);
 
 	CONVERSION(ColdToPhysical);
@@ -372,12 +372,9 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	**********************************************************************************************************/
 
 #define CONVERTELEMENT(A, B) \
-	float Temp##A = A##Damage; \
-	float Temp##B = B##Damage; \
-	Temp##A *= A##To##B##ConversionPercent; \
-	Temp##B += Temp##A; \
-	A##Damage = Temp##A; \
-	B##Damage = Temp##B;
+	float Temp##To##B##From##A = A##Damage * A##To##B##ConversionPercent; \
+	A##Damage = A##Damage * (1 - A##To##B##ConversionPercent); \
+	B##Damage += Temp##To##B##From##A;
 
 	/*
 	We start with converting everything in order like this everything->physical->fire->cold->lightning->chaos

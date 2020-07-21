@@ -9,6 +9,7 @@
 URPGAttributeSet::URPGAttributeSet()
 	: Health(1.f)
 	, MaxHealth(1.f)
+	, HealthRegen(0.f)
 	, Mana(0.f)
 	, MaxMana(0.f)
 	, ManaRegen(1.f)
@@ -47,7 +48,7 @@ URPGAttributeSet::URPGAttributeSet()
 	//Conversion
 	//Physcial Conversion
 	, PhysicalToFireConversionPercent(0.f)
-	, PhysicaltoColdConversionPercent(0.f)
+	, PhysicalToColdConversionPercent(0.f)
 	, PhysicalToLightningConversionPercent(0.f)
 	, PhysicalToChaosConversionPercent(0.f)
 	//Fire Conversion
@@ -90,6 +91,7 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(URPGAttributeSet, Health);
 	DOREPLIFETIME(URPGAttributeSet, MaxHealth);
+	DOREPLIFETIME(URPGAttributeSet, HealthRegen);
 	DOREPLIFETIME(URPGAttributeSet, Mana);
 	DOREPLIFETIME(URPGAttributeSet, MaxMana);
 	DOREPLIFETIME(URPGAttributeSet, ManaRegen);
@@ -142,7 +144,7 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	**********************************************************************************************************/
 
 	DOREPLIFETIME(URPGAttributeSet, PhysicalToFireConversionPercent);
-	DOREPLIFETIME(URPGAttributeSet, PhysicaltoColdConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, PhysicalToColdConversionPercent);
 	DOREPLIFETIME(URPGAttributeSet, PhysicalToLightningConversionPercent);
 	DOREPLIFETIME(URPGAttributeSet, PhysicalToChaosConversionPercent);
 
@@ -152,7 +154,7 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(URPGAttributeSet, FireToPhysicalConversionPercent);
 	DOREPLIFETIME(URPGAttributeSet, FireToColdConversionPercent);
-	DOREPLIFETIME(URPGAttributeSet, FireToLighConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, FireToLightningConversionPercent);
 	DOREPLIFETIME(URPGAttributeSet, FireToChaosConversionPercent);
 
 	/**********************************************************************************************************
@@ -213,6 +215,11 @@ void URPGAttributeSet::OnRep_Health()
 void URPGAttributeSet::OnRep_MaxHealth()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MaxHealth);
+}
+
+void URPGAttributeSet::OnRep_HealthRegen()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, HealthRegen);
 }
 
 void URPGAttributeSet::OnRep_Mana()
@@ -379,17 +386,17 @@ void URPGAttributeSet::OnRep_PhysicalToFireConversionPercent()
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToFireConversionPercent);
 }
 
-void URPGAttributeSet::PhysicalToColdConversionPercent()
+void URPGAttributeSet::OnRep_PhysicalToColdConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToColdConversionPercent);
 }
 
-void URPGAttributeSet::PhysicalToLightningConversionPercent()
+void URPGAttributeSet::OnRep_PhysicalToLightningConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToLightningConversionPercent);
 }
 
-void URPGAttributeSet::PhysicalToChaosConversionPercent()
+void URPGAttributeSet::OnRep_PhysicalToChaosConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToChaosConversionPercent);
 }
@@ -398,22 +405,22 @@ void URPGAttributeSet::PhysicalToChaosConversionPercent()
 Fire Conversion
 **********************************************************************************************************/
 
-void URPGAttributeSet::FireToPhysicalConversionPercent()
+void URPGAttributeSet::OnRep_FireToPhysicalConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, FireToPhysicalConversionPercent);
 }
 
-void URPGAttributeSet::FireToColdConversionPercent()
+void URPGAttributeSet::OnRep_FireToColdConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, FireToColdConversionPercent);
 }
 
-void URPGAttributeSet::FireToLightningConversionPercent()
+void URPGAttributeSet::OnRep_FireToLightningConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, FireToLightningConversionPercent);
 }
 
-void URPGAttributeSet::FireToChaosConversionPercent()
+void URPGAttributeSet::OnRep_FireToChaosConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, FireToChaosConversionPercent);
 }
@@ -422,22 +429,22 @@ void URPGAttributeSet::FireToChaosConversionPercent()
 Cold Conversion
 **********************************************************************************************************/
 
-void URPGAttributeSet::ColdToPhysicalConversionPercent()
+void URPGAttributeSet::OnRep_ColdToPhysicalConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ColdToPhysicalConversionPercent);
 }
 
-void URPGAttributeSet::ColdToFireConversionPercent()
+void URPGAttributeSet::OnRep_ColdToFireConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ColdToFireConversionPercent);
 }
 
-void URPGAttributeSet::ColdToLightningConversionPercent()
+void URPGAttributeSet::OnRep_ColdToLightningConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ColdToLightningConversionPercent);
 }
 
-void URPGAttributeSet::ColdToChaosConversionPercent()
+void URPGAttributeSet::OnRep_ColdToChaosConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ColdToChaosConversionPercent);
 }
@@ -446,22 +453,22 @@ void URPGAttributeSet::ColdToChaosConversionPercent()
 Lightning Conversion
 **********************************************************************************************************/
 
-void URPGAttributeSet::LightningToPhysicalConversionPercent()
+void URPGAttributeSet::OnRep_LightningToPhysicalConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, LightningToPhysicalConversionPercent);
 }
 
-void URPGAttributeSet::LightningToFireConversionPercent()
+void URPGAttributeSet::OnRep_LightningToFireConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, LightningToFireConversionPercent);
 }
 
-void URPGAttributeSet::LightningToColdConversionPercent()
+void URPGAttributeSet::OnRep_LightningToColdConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, LightningToColdConversionPercent);
 }
 
-void URPGAttributeSet::LightningToChaosConversionPercent()
+void URPGAttributeSet::OnRep_LightningToChaosConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, LightningToChaosConversionPercent);
 }
@@ -470,24 +477,24 @@ void URPGAttributeSet::LightningToChaosConversionPercent()
 Chaos Conversion
 **********************************************************************************************************/
 
-void URPGAttributeSet::ChaosToPhysicalConversionPercent()
+void URPGAttributeSet::OnRep_ChaosToPhysicalConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToPhysicalConversionPercent);
 }
 
-void URPGAttributeSet::ChaosToFireConversionPercent()
+void URPGAttributeSet::OnRep_ChaosToFireConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToFireConversionPercent);
 }
 
-void URPGAttributeSet::ChaosToColdConversionPercent()
+void URPGAttributeSet::OnRep_ChaosToColdConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToColdConversionPercent);
 }
 
-void URPGAttributeSet::ChaosToLighningConversionPercent()
+void URPGAttributeSet::OnRep_ChaosToLightningConversionPercent()
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToLighningConversionPercent);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToLightningConversionPercent);
 }
 
 /**********************************************************************************************************

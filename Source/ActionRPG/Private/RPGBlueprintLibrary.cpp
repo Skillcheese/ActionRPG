@@ -86,49 +86,55 @@ FString URPGBlueprintLibrary::MyGameplayEffectToString(const TSubclassOf<UGamepl
 	FString TagsString = "";
 	UGameplayEffect* DefaultEffectObject = Effect.GetDefaultObject();
 	TArray<FGameplayEffectExecutionDefinition> Executions = DefaultEffectObject->Executions;
-	bool isDamageOverTime = CheckTag(FName("Ability.Damage.DamageOverTime"));
 	bool isMagic = CheckTag(FName("Ability.Damage.Magic"));
 	bool isMelee = CheckTag(FName("Ability.Damage.Melee"));
-	bool isRanged = CheckTag(FName("Ability.Damage.Ranged"));
 	bool isProjectile = CheckTag(FName("Ability.Damage.Projectile"));
+	bool isRanged = CheckTag(FName("Ability.Damage.Ranged"));
 	bool isMinion = CheckTag(FName("Ability.Damage.Minion"));
-
+	bool isDamageOverTime = CheckTag(FName("Ability.Damage.DamageOverTime"));
+	bool isArea = CheckTag(FName("Ability.Damage.Area"));
 	bool putComma = false;
+
 #define CommaCheck if (putComma) \
-{ \
- TagsString.Append(", "); \
-} \
-putComma = true; 
+	{ \
+		TagsString.Append(", "); \
+	} \
+	putComma = true; 
 	
-	if (isDamageOverTime)
-	{
-		CommaCheck
-		TagsString.Append("Damage Over Time");
-	}
 	if (isMagic)
 	{
-		CommaCheck
+		CommaCheck;
 		TagsString.Append("Magic");
 	}
 	if (isMelee)
 	{
-		CommaCheck
+		CommaCheck;
 		TagsString.Append("Melee");
-	}
-	if (isRanged)
-	{
-		CommaCheck
-		TagsString.Append("Ranged");
 	}
 	if (isProjectile)
 	{
-		CommaCheck
+		CommaCheck;
 		TagsString.Append("Projectile");
+	}
+	if (isRanged)
+	{
+		CommaCheck;
+		TagsString.Append("Ranged");
 	}
 	if (isMinion)
 	{
-		CommaCheck
+		CommaCheck;
 		TagsString.Append("Minion");
+	}
+	if (isDamageOverTime)
+	{
+		CommaCheck;
+		TagsString.Append("Damage Over Time");
+	}
+	if (isArea)
+	{
+		CommaCheck;
+		TagsString.Append("Area of Effect");
 	}
 	CommaCheck
 	TArray<FString> DamageNames = TArray<FString>();
@@ -229,22 +235,28 @@ FString URPGBlueprintLibrary::MyGameplayAbilityToString(const TSubclassOf<URPGGa
 
 FString URPGBlueprintLibrary::TagToString(FGameplayTag Tag)
 {
+
 	FString tag = Tag.ToString();
+#define CHECK(Tagg, Value) \
+	if(tag == Tagg) \
+	{ \
+		return Value;\
+	}
+
 	if (tag == "Ability.Skill" || tag == "Ability.Melee")
 	{
 		return "";
 	}
-	else if (tag == "Ability.Type.Attack")
-	{
-		return "Attack";
-	}
-	else if (tag == "Ability.Type.Spell")
-	{
-		return "Spell";
-	}
-	else if (tag == "Ability.Skill.OnFootstep")
-	{
-		return "Footstep";
-	}
+	CHECK("Ability.Damage.Magic", "Magic");
+	CHECK("Ability.Damage.Melee", "Melee");
+	CHECK("Ability.Type.Attack", "Attack");
+	CHECK("Ability.Type.Spell", "Spell");
+	CHECK("Ability.Damage.Projectile", "Projectile");
+	CHECK("Ability.Damage.Ranged", "Ranged");
+	CHECK("Ability.Damage.Minion", "Minion"); 
+	CHECK("Ability.Damage.DamageOverTime", "Damage Over Time");
+	CHECK("Ability.Damage.Area", "Area Of Effect");
+	CHECK("Ability.Skill.OnFootstep", "Footstep");
+
 	return Tag.ToString();
 }
