@@ -176,9 +176,115 @@ public:
 	Elemental Conversion
 	**********************************************************************************************************/
 
+	/**********************************************************************************************************
+	Physical Conversion
+	**********************************************************************************************************/
+
 	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_PhysicalToFireConversionPercent)
 	FGameplayAttributeData PhysicalToFireConversionPercent;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, PhysicalToFireConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_PhysicalToColdConversionPercent)
+	FGameplayAttributeData PhysicalToColdConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, PhysicalToColdConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_PhysicalToLightningConversionPercent)
+	FGameplayAttributeData PhysicalToLightningConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, PhysicalToLightningConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_PhysicalToChaosConversionPercent)
+	FGameplayAttributeData PhysicalToChaosConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, PhysicalToChaosConversionPercent)
+
+	/**********************************************************************************************************
+	Fire Conversion
+	**********************************************************************************************************/
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_FireToPhysicalConversionPercent)
+	FGameplayAttributeData FireToPhysicalConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, FireToPhysicalConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_FireToColdConversionPercent)
+	FGameplayAttributeData FireToColdConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, FireToColdConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_FireToLightningConversionPercent)
+	FGameplayAttributeData FireToLightningConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, FireToLightningConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_FireToChaosConversionPercent)
+	FGameplayAttributeData FireToChaosConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, FireToChaosConversionPercent)
+
+	/**********************************************************************************************************
+	Cold Conversion
+	**********************************************************************************************************/
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_ColdToPhysicalConversionPercent)
+	FGameplayAttributeData ColdToPhysicalConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ColdToPhysicalConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_ColdToFireConversionPercent)
+	FGameplayAttributeData ColdToFireConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ColdToFireConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_ColdToLightningConversionPercent)
+	FGameplayAttributeData ColdToLightningConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ColdToLightningConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_ColdToChaosConversionPercent)
+	FGameplayAttributeData ColdToChaosConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ColdToChaosConversionPercent)
+
+	/**********************************************************************************************************
+	Lightning Conversion
+	**********************************************************************************************************/
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_LightningToPhysicalConversionPercent)
+	FGameplayAttributeData LightningToPhysicalConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, LightningToPhysicalConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_LightningToFireConversionPercent)
+	FGameplayAttributeData LightningToFireConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, LightningToFireConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_LightningToColdConversionPercent)
+	FGameplayAttributeData LightningToColdConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, LightningToColdConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_LightningToChaosConversionPercent)
+	FGameplayAttributeData LightningToChaosConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, LightningToChaosConversionPercent)
+
+	/**********************************************************************************************************
+	Chaos Conversion
+	**********************************************************************************************************/
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_ChaosToPhysicalConversionPercent)
+	FGameplayAttributeData ChaosToPhysicalConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosToPhysicalConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_ChaosToFireConversionPercent)
+	FGameplayAttributeData ChaosToFireConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosToFireConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_ChaosToColdConversionPercent)
+	FGameplayAttributeData ChaosToColdConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosToColdConversionPercent)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage Conversion", ReplicatedUsing = OnRep_ChaosToLightningConversionPercent)
+	FGameplayAttributeData ChaosToLightningConversionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ChaosToLightningConversionPercent)
+
+	/**********************************************************************************************************
+	Weapon damage properties
+	**********************************************************************************************************/
+
+	/*
+	UPROPERTY(BlueprintReadOnly, Category = "Weapon Damage", ReplicatedUsing = OnRep_WeaponDamageSwordPercent)
+	FGameplayAttributeData WeaponDamageSwordPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, WeaponDamageSwordPercent)
+	*/
 
 	/**********************************************************************************************************
 	Misc properties, like duration/area of effect
@@ -326,8 +432,94 @@ protected:
 	Elemental Conversion
 	**********************************************************************************************************/
 
+	/**********************************************************************************************************
+	Physical Conversion
+	**********************************************************************************************************/
+
 	UFUNCTION()
 	virtual void OnRep_PhysicalToFireConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_PhysicalToColdConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_PhysicalToLightningConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_PhysicalToChaosConversionPercent();
+
+	/**********************************************************************************************************
+	Fire Conversion
+	**********************************************************************************************************/
+
+	UFUNCTION()
+	virtual void OnRep_FireToPhysicalConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_FireToColdConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_FireToLightningConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_FireToChaosConversionPercent();
+
+	/**********************************************************************************************************
+	Cold Conversion
+	**********************************************************************************************************/
+
+	UFUNCTION()
+	virtual void OnRep_ColdToPhysicalConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_ColdToFireConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_ColdToLightningConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_ColdToChaosConversionPercent();
+
+	/**********************************************************************************************************
+	Lightning Conversion
+	**********************************************************************************************************/
+
+	UFUNCTION()
+	virtual void OnRep_LightningToPhysicalConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_LightningToFireConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_LightningToColdConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_LightningToChaosConversionPercent();
+
+	/**********************************************************************************************************
+	Chaos Conversion
+	**********************************************************************************************************/
+
+	UFUNCTION()
+	virtual void OnRep_ChaosToPhysicalConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_ChaosToFireConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_ChaosToColdConversionPercent();
+
+	UFUNCTION()
+	virtual void OnRep_ChaosToLightningConversionPercent();
+
+	/**********************************************************************************************************
+	Weapon damage properties
+	**********************************************************************************************************/
+
+	/*
+	UFUNCTION()
+	virtual void OnRep_WeaponDamageSwordPercent();
+	*/
 
 	/**********************************************************************************************************
 	Misc properties, like duration/area of effect

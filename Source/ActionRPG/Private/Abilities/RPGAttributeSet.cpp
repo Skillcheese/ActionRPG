@@ -45,7 +45,33 @@ URPGAttributeSet::URPGAttributeSet()
 	, DamageOverTimeDamage(1.f)
 	, AreaDamagePercent(1.f)
 	//Conversion
+	//Physcial Conversion
 	, PhysicalToFireConversionPercent(0.f)
+	, PhysicaltoColdConversionPercent(0.f)
+	, PhysicalToLightningConversionPercent(0.f)
+	, PhysicalToChaosConversionPercent(0.f)
+	//Fire Conversion
+	, FireToPhysicalConversionPercent(0.f)
+	, FireToColdConversionPercent(0.f)
+	, FireToLightningConversionPercent(0.f)
+	, FireToChaosConversionPercent(0.f)
+	//Cold Conversion
+	, ColdToPhysicalConversionPercent(0.f)
+	, ColdToFireConversionPercent(0.f)
+	, ColdToLightningConversionPercent(0.f)
+	, ColdToChaosConversionPercent(0.f)
+	//Lightning Conversion
+	, LightningToPhysicalConversionPercent(0.f)
+	, LightningToFireConversionPercent(0.f)
+	, LightningToColdConversionPercent(0.f)
+	, LightningToChaosConversionPercent(0.f)
+	//Chaos Conversion
+	, ChaosToPhysicalConversionPercent(0.f)
+	, ChaosToFireConversionPercent(0.f)
+	, ChaosToColdConversionPercent(0.f)
+	, ChaosToLightningConversionPercent(0.f)
+	//Weapon Damage
+	//, WeaponDamageSwordPercent(1.f)
 	//Results
 	, PhysicalDamage(0.0f)
 	, FireDamage(0.0f)
@@ -110,9 +136,58 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	/**********************************************************************************************************
 	Elemental Conversion
 	**********************************************************************************************************/
+	
+	/**********************************************************************************************************
+	Physical Conversion
+	**********************************************************************************************************/
 
 	DOREPLIFETIME(URPGAttributeSet, PhysicalToFireConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, PhysicaltoColdConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, PhysicalToLightningConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, PhysicalToChaosConversionPercent);
+
+	/**********************************************************************************************************
+	Fire Conversion
+	**********************************************************************************************************/
+
+	DOREPLIFETIME(URPGAttributeSet, FireToPhysicalConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, FireToColdConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, FireToLighConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, FireToChaosConversionPercent);
+
+	/**********************************************************************************************************
+	Cold Conversion
+	**********************************************************************************************************/
 	
+	DOREPLIFETIME(URPGAttributeSet, ColdToPhysicalConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, ColdToFireConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, ColdToLightningConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, ColdToChaosConversionPercent);
+
+	/**********************************************************************************************************
+	Lightning Conversion
+	**********************************************************************************************************/
+	
+	DOREPLIFETIME(URPGAttributeSet, LightningToPhysicalConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, LightningToFireConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, LightningToColdConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, LightningToChaosConversionPercent);
+
+	/**********************************************************************************************************
+	Chaos Conversion
+	**********************************************************************************************************/
+
+	DOREPLIFETIME(URPGAttributeSet, ChaosToPhysicalConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, ChaosToFireConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, ChaosToColdConversionPercent);
+	DOREPLIFETIME(URPGAttributeSet, ChaosToLightningConversionPercent);
+
+	/**********************************************************************************************************
+	Weapon damage properties
+	**********************************************************************************************************/
+
+	//DOREPLIFETIME(URPGAttributeSet, WeaponDamageSwordPercent);
+
 	/**********************************************************************************************************
 	Misc properties, like duration/area of effect
 	**********************************************************************************************************/
@@ -295,11 +370,136 @@ void URPGAttributeSet::OnRep_AreaDamagePercent()
 Elemental Conversion
 **********************************************************************************************************/
 
+/**********************************************************************************************************
+Physical Conversion
+**********************************************************************************************************/
+
 void URPGAttributeSet::OnRep_PhysicalToFireConversionPercent()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToFireConversionPercent);
 }
 
+void URPGAttributeSet::PhysicalToColdConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToColdConversionPercent);
+}
+
+void URPGAttributeSet::PhysicalToLightningConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToLightningConversionPercent);
+}
+
+void URPGAttributeSet::PhysicalToChaosConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PhysicalToChaosConversionPercent);
+}
+
+/**********************************************************************************************************
+Fire Conversion
+**********************************************************************************************************/
+
+void URPGAttributeSet::FireToPhysicalConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, FireToPhysicalConversionPercent);
+}
+
+void URPGAttributeSet::FireToColdConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, FireToColdConversionPercent);
+}
+
+void URPGAttributeSet::FireToLightningConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, FireToLightningConversionPercent);
+}
+
+void URPGAttributeSet::FireToChaosConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, FireToChaosConversionPercent);
+}
+
+/**********************************************************************************************************
+Cold Conversion
+**********************************************************************************************************/
+
+void URPGAttributeSet::ColdToPhysicalConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ColdToPhysicalConversionPercent);
+}
+
+void URPGAttributeSet::ColdToFireConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ColdToFireConversionPercent);
+}
+
+void URPGAttributeSet::ColdToLightningConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ColdToLightningConversionPercent);
+}
+
+void URPGAttributeSet::ColdToChaosConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ColdToChaosConversionPercent);
+}
+
+/**********************************************************************************************************
+Lightning Conversion
+**********************************************************************************************************/
+
+void URPGAttributeSet::LightningToPhysicalConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, LightningToPhysicalConversionPercent);
+}
+
+void URPGAttributeSet::LightningToFireConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, LightningToFireConversionPercent);
+}
+
+void URPGAttributeSet::LightningToColdConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, LightningToColdConversionPercent);
+}
+
+void URPGAttributeSet::LightningToChaosConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, LightningToChaosConversionPercent);
+}
+
+/**********************************************************************************************************
+Chaos Conversion
+**********************************************************************************************************/
+
+void URPGAttributeSet::ChaosToPhysicalConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToPhysicalConversionPercent);
+}
+
+void URPGAttributeSet::ChaosToFireConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToFireConversionPercent);
+}
+
+void URPGAttributeSet::ChaosToColdConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToColdConversionPercent);
+}
+
+void URPGAttributeSet::ChaosToLighningConversionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ChaosToLighningConversionPercent);
+}
+
+/**********************************************************************************************************
+Weapon damage properties
+**********************************************************************************************************/
+
+/*
+void URPGAttributeSet::WeaponDamageSwordPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, WeaponDamageSwordPercent);
+}
+*/
 
 /**********************************************************************************************************
 Misc properties, like duration/area of effect

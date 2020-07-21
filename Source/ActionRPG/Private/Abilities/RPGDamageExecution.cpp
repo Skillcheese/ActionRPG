@@ -32,8 +32,33 @@ struct RPGDamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(DamageOverTimeDamage);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AreaDamagePercent);
 	//Conversion
+	//Physical Conversion
 	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalToFireConversionPercent);
-
+	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalToColdConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalToLightningConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalToChaosConversionPercent);
+	//Fire Conversion
+	DECLARE_ATTRIBUTE_CAPTUREDEF(FireToPhysicalConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(FireToColdConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(FireToLightningConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(FireToChaosConversionPercent);
+	//Cold Conversion
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ColdToPhysicalConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ColdToFireConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ColdToLightningConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ColdToChaosConversionPercent);
+	//Lightning Conversion
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningToPhysicalConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningToFireConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningToColdConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningToChaosConversionPercent);
+	//Chaos Conversion
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ChaosToPhysicalConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ChaosToFireConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ChaosToColdConversionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ChaosToLightningConversionPercent);
+	//Weapon Damage
+	//DECLARE_ATTRIBUTE_CAPTUREDEF(WeaponDamageSwordPercent);
 	//flat damage numbers
 	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalDamage);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(FireDamage);
@@ -67,13 +92,38 @@ struct RPGDamageStatics
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, AttackDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, SpellDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ProjectileDamagePercent, Source, true);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, RnagedDamagePercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, RangedDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, MinionDamagePercent, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, DamageOverTimeDamage, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, AreaDamagePercent, Source, true);
 		//Conversion
+		//Physical Conversion
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, PhysicalToFireConversionPercent, Source, true);
-
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, PhysicalToColdConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, PhysicalToLightningConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, PhysicalToChaosConversionPercent, Source, true);
+		//Fire Conversion
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, FireToPhysicalConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, FireToColdConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, FireToLightningConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, FireToChaosConversionPercent, Source, true);
+		//Cold Conversion
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ColdToPhysicalConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ColdToFireConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ColdToLightningConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ColdToChaosConversionPercent, Source, true);
+		//Lightning Conversion
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, LightningToPhysicalConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, LightningToFireConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, LightningToColdConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, LightningToChaosConversionPercent, Source, true);
+		//Chaos Conversion
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToPhysicalConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToFireConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToColConversionPercent, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosToLightningConversionPercent, Source, true);
+		//Weapon Damage
+		//DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, WeaponDamageSwordPercent, Source, true);
 		//Source Damage Attributes, snapshotted so it takes the value on launch, not on hit
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, PhysicalDamage, Source, true);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, FireDamage, Source, true);
@@ -123,8 +173,33 @@ URPGDamageExecution::URPGDamageExecution()
 	CAP(DamageOverTimeDamage);
 	CAP(AreaDamagePercent);
 	//Conversion
+	//Physical Conversion
 	CAP(PhysicalToFireConversionPercent);
-
+	CAP(PhysicalToColdConversionPercent);
+	CAP(PhysicalToLightningConversionPercent);
+	CAP(PhysicalToChaosConversionPercent);
+	//Fire Conversion
+	CAP(FireToPhysicalConversionPercent);
+	CAP(FireToColdConversionPercent);
+	CAP(FireToLightningConversionPercent);
+	CAP(FireToChaosConversionPercent);
+	//Cold Conversion
+	CAP(ColdToPhysicalConversionPercent);
+	CAP(ColdToFireConversionPercent);
+	CAP(ColdToLightningConversionPercent);
+	CAP(ColdToChaosConversionPercent);
+	//Lightning Conversion
+	CAP(LightningToPhysicalConversionPercent);
+	CAP(LightningToFireConversionPercent);
+	CAP(LightningToColdConversionPercent);
+	CAP(LightningToChaosConversionPercent);
+	//Chaos Conversion
+	CAP(ChaosToPhysicalConversionPercent);
+	CAP(ChaosToFireConversionPercent);
+	CAP(ChaosToColdConversionPercent);
+	CAP(ChaosToLightningConversionPercent);
+	//Weapon Damage
+	//CAP(WeaponDamageSwordPercent);
 	//Source Damage 
 	CAP(PhysicalDamage);
 	CAP(FireDamage);
@@ -160,6 +235,10 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	*******************************************************************************/
 #define CAPTURE(Name) \
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().Name##Def, EvaluationParameters, Name)
+
+#define CONVERSION(name) \
+	float name##ConversionPercent = 0.f; \
+	CAPTURE(name##ConversionPercent);
 
 #define TAGCHECK(VarName, TagName) \
 	float VarName = 1.f; \
@@ -233,6 +312,31 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	Elemental Conversion
 	**********************************************************************************************************/
 
+	CONVERSION(PhysicalToFire);
+	CONVERSION(PhysicalToCold);
+	CONVERSION(PhysicalToLightning);
+	CONVERSION(PhysicalToChaos);
+
+	CONVERSION(FireToPhysical);
+	CONVERSION(FireToCold);
+	CONVERSION(FireToLighting);
+	CONVERSION(FireToChaos);
+
+	CONVERSION(ColdToPhysical);
+	CONVERSION(ColdToFire);
+	CONVERSION(ColdToLightning);
+	CONVERSION(ColdToChaos);
+
+	CONVERSION(LightningToPhysical);
+	CONVERSION(LightningToFire);
+	CONVERSION(LightningToCold);
+	CONVERSION(LightningToChaos);
+
+	CONVERSION(ChaosToPhysical);
+	CONVERSION(ChaosToFire);
+	CONVERSION(ChaosToCold);
+	CONVERSION(ChaosToLightning);
+
 	/**********************************************************************************************************
 	Misc properties, like duration/area of effect
 	**********************************************************************************************************/
@@ -255,6 +359,55 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 
 	float ChaosDamage = 0.f;
 	CAPTURE(ChaosDamage);
+
+	/**********************************************************************************************************
+	WeaponDamage Calculations
+	**********************************************************************************************************/
+
+	//Base skill damage + Base weapon damage if weapon is of applicable type (attack vs spell)* %Weaponscaling * %extradamagewithweapon
+
+
+	/**********************************************************************************************************
+	Conversion Calculations
+	**********************************************************************************************************/
+
+#define CONVERTELEMENT(A, B) \
+	float Temp##A = A##Damage; \
+	float Temp##B = B##Damage; \
+	Temp##A *= A##To##B##ConversionPercent; \
+	Temp##B += Temp##A; \
+	A##Damage = Temp##A; \
+	B##Damage = Temp##B;
+
+	/*
+	We start with converting everything in order like this everything->physical->fire->cold->lightning->chaos
+	this means that elements have the reverse priority in which one will be favored if damage id convered back and forth between multiple things
+	Ex. if you have conversion of every type to every other type somehow, it will all end up as chaos damage
+	*/
+	CONVERTELEMENT(Fire, Physical);
+	CONVERTELEMENT(Cold, Physical);
+	CONVERTELEMENT(Lightning, Physical);
+	CONVERTELEMENT(Chaos, Physical);
+
+	CONVERTELEMENT(Physical, Fire);
+	CONVERTELEMENT(Cold, Fire);
+	CONVERTELEMENT(Lightning, Fire);
+	CONVERTELEMENT(Chaos, Fire);
+
+	CONVERTELEMENT(Physical, Cold);
+	CONVERTELEMENT(Fire, Cold);
+	CONVERTELEMENT(Lightning, Cold);
+	CONVERTELEMENT(Chaos, Cold);
+
+	CONVERTELEMENT(Physical, Lightning);
+	CONVERTELEMENT(Fire, Lightning);
+	CONVERTELEMENT(Cold, Lightning);
+	CONVERTELEMENT(Chaos, Lightning);
+
+	CONVERTELEMENT(Physical, Chaos);
+	CONVERTELEMENT(Fire, Chaos);
+	CONVERTELEMENT(Cold, Chaos);
+	CONVERTELEMENT(Lightning, Chaos);
 
 	/**********************************************************************************************************
 	Final Calculations
