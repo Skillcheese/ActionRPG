@@ -319,6 +319,16 @@ float ARPGCharacterBase::GetMaxMana() const
 	return AttributeSet->GetMaxMana();
 }
 
+float ARPGCharacterBase::GetStamina() const
+{
+	return AttributeSet->GetStamina();
+}
+
+float ARPGCharacterBase::GetMaxStamina() const
+{
+	return AttributeSet->GetMaxStamina();
+}
+
 float ARPGCharacterBase::GetMoveSpeed() const
 {
 	return AttributeSet->GetMoveSpeed();
@@ -453,6 +463,14 @@ void ARPGCharacterBase::HandleManaChanged(float DeltaValue, const struct FGamepl
 	if (bAbilitiesInitialized)
 	{
 		OnManaChanged(DeltaValue, EventTags);
+	}
+}
+
+void ARPGCharacterBase::HandleStaminaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	if (bAbilitiesInitialized)
+	{
+		OnStaminaChanged(DeltaValue, EventTags);
 	}
 }
 

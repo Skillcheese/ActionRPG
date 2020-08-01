@@ -53,6 +53,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual float GetMaxMana() const;
 
+	/** Returns current mana */
+	UFUNCTION(BlueprintCallable)
+	virtual float GetStamina() const;
+
+	/** Returns maximum Stamina, Stamina will never be greater than this */
+	UFUNCTION(BlueprintCallable)
+	virtual float GetMaxStamina() const;
+
 	/** Returns current movement speed */
 	UFUNCTION(BlueprintCallable)
 	virtual float GetMoveSpeed() const;
@@ -174,6 +182,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnStaminaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
 	/**
 	 * Called when movement speed is changed
 	 *
@@ -206,6 +217,7 @@ protected:
 	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ARPGCharacterBase* InstigatorCharacter, AActor* DamageCauser);
 	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 	virtual void HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+	virtual void HandleStaminaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 	virtual void HandleMoveSpeedChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 
 	// Friended to allow access to handle functions above

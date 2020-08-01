@@ -13,6 +13,9 @@ URPGAttributeSet::URPGAttributeSet()
 	, Mana(0.f)
 	, MaxMana(0.f)
 	, ManaRegen(1.f)
+	, Stamina(0.f)
+	, MaxStamina(0.f)
+	, StaminaRegen(1.f)
 	, MoveSpeed(1.0f)
 	, Damage(0.0f)
 
@@ -26,7 +29,9 @@ URPGAttributeSet::URPGAttributeSet()
 	, LightningResistancePercent(0.0f)
 	, ChaosResistancePercent(0.0f)
 	, DodgeEffectiveness(0.0f)
+	, DodgeDamageReductionPercent(0.0f)
 	, BlockEffectiveness(0.0f)
+	, BlockDamageReductionPercent(0.0f)
 	//Offensive
 	, GlobalDamagePercent(1.f)
 	, PhysicalDamagePercent(1.f)
@@ -95,6 +100,9 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, Mana);
 	DOREPLIFETIME(URPGAttributeSet, MaxMana);
 	DOREPLIFETIME(URPGAttributeSet, ManaRegen);
+	DOREPLIFETIME(URPGAttributeSet, Stamina);
+	DOREPLIFETIME(URPGAttributeSet, MaxStamina);
+	DOREPLIFETIME(URPGAttributeSet, StaminaRegen);
 	DOREPLIFETIME(URPGAttributeSet, MoveSpeed);
 
 	/**********************************************************************************************************
@@ -107,7 +115,9 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, LightningResistancePercent);
 	DOREPLIFETIME(URPGAttributeSet, ChaosResistancePercent);
 	DOREPLIFETIME(URPGAttributeSet, DodgeEffectiveness);
+	DOREPLIFETIME(URPGAttributeSet, DodgeDamageReductionPercent);
 	DOREPLIFETIME(URPGAttributeSet, BlockEffectiveness);
+	DOREPLIFETIME(URPGAttributeSet, BlockDamageReductionPercent);
 
 	/**********************************************************************************************************
 	Offensive properties
@@ -237,6 +247,21 @@ void URPGAttributeSet::OnRep_ManaRegen()
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ManaRegen);
 }
 
+void URPGAttributeSet::OnRep_Stamina()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, Stamina);
+}
+
+void URPGAttributeSet::OnRep_MaxStamina()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MaxStamina);
+}
+
+void URPGAttributeSet::OnRep_StaminaRegen()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, StaminaRegen);
+}
+
 void URPGAttributeSet::OnRep_MoveSpeed()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MoveSpeed);
@@ -280,9 +305,19 @@ void URPGAttributeSet::OnRep_DodgeEffectiveness()
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DodgeEffectiveness);
 }
 
+void URPGAttributeSet::OnRep_DodgeDamageReductionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DodgeDamageReductionPercent);
+}
+
 void URPGAttributeSet::OnRep_BlockEffectiveness()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, BlockEffectiveness);
+}
+
+void URPGAttributeSet::OnRep_BlockDamageReductionPercent()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, BlockDamageReductionPercent);
 }
 
 /**********************************************************************************************************
@@ -578,6 +613,10 @@ void URPGAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 	{
 		AdjustAttributeForMaxChange(Mana, MaxMana, NewValue, GetManaAttribute());
 	}
+	else if (Attribute == GetMaxStaminaAttribute())
+	{
+		AdjustAttributeForMaxChange(Stamina, MaxStamina, NewValue, GetStaminaAttribute());
+	}
 }
 
 void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -690,6 +729,16 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 		{
 			// Call for all mana changes
 			TargetCharacter->HandleManaChanged(DeltaValue, SourceTags);
+		}
+	}
+	else if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
+	{
+		// Clamp Stamina
+		SetStamina(FMath::Clamp(GetStamina(), 0.0f, GetMaxStamina()));
+
+		if (TargetCharacter)
+		{
+			TargetCharacter->HandleStaminaChanged(DeltaValue, SourceTags);
 		}
 	}
 	else if (Data.EvaluatedData.Attribute == GetMoveSpeedAttribute())

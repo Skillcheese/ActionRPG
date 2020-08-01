@@ -56,13 +56,25 @@ public:
 	FGameplayAttributeData ManaRegen;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ManaRegen)
 
+	UPROPERTY(BlueprintReadOnly, Category = "Stamina", ReplicatedUsing = OnRep_Stamina)
+	FGameplayAttributeData Stamina;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, Stamina)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Stamina", ReplicatedUsing = OnRep_MaxStamina)
+	FGameplayAttributeData MaxStamina;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MaxStamina)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Stamina", ReplicatedUsing = OnRep_StaminaRegen)
+	FGameplayAttributeData StaminaRegen;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, StaminaRegen)
+
 	/** MoveSpeed affects how fast characters can move */
 	UPROPERTY(BlueprintReadOnly, Category = "MoveSpeed", ReplicatedUsing = OnRep_MoveSpeed)
 	FGameplayAttributeData MoveSpeed;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MoveSpeed)
 
 	/** Damage is a 'temporary' attribute used by the DamageExecution to calculate final damage, which then turns into -Health */
-	UPROPERTY(BlueprintReadOnly, Category = "Mana", meta = (HideFromLevelInfos))
+	UPROPERTY(BlueprintReadOnly, Category = "Damage", meta = (HideFromLevelInfos))
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, Damage)
 
@@ -99,9 +111,19 @@ public:
 	FGameplayAttributeData DodgeEffectiveness;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, DodgeEffectiveness)
 
+	UPROPERTY(BlueprintReadOnly, Category = "Dodge", ReplicatedUsing = OnRep_DodgeDamageReductionPercent)
+	FGameplayAttributeData DodgeDamageReductionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, DodgeDamageReductionPercent)
+
 	UPROPERTY(BlueprintReadOnly, Category = "Block", ReplicatedUsing = OnRep_BlockEffectiveness)
 	FGameplayAttributeData BlockEffectiveness;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, BlockEffectiveness)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Block", ReplicatedUsing = OnRep_BlockDamageReductionPercent)
+	FGameplayAttributeData BlockDamageReductionPercent;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, BlockDamageReductionPercent)
+
+	
 		
 
 	/**********************************************************************************************************
@@ -350,6 +372,15 @@ protected:
 	virtual void OnRep_ManaRegen();
 
 	UFUNCTION()
+	virtual void OnRep_Stamina();
+
+	UFUNCTION()
+	virtual void OnRep_MaxStamina();
+
+	UFUNCTION()
+	virtual void OnRep_StaminaRegen();
+
+	UFUNCTION()
 	virtual void OnRep_MoveSpeed();
 	
 	/**********************************************************************************************************
@@ -377,8 +408,14 @@ protected:
 	virtual void OnRep_DodgeEffectiveness();
 
 	UFUNCTION()
+	virtual void OnRep_DodgeDamageReductionPercent();
+
+	UFUNCTION()
 	virtual void OnRep_BlockEffectiveness();
 
+	UFUNCTION()
+	virtual void OnRep_BlockDamageReductionPercent();
+	
 	/**********************************************************************************************************
 	Offensive properties
 	**********************************************************************************************************/

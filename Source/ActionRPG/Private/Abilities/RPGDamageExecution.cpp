@@ -13,6 +13,8 @@ struct RPGDamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(ColdResistancePercent);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningResistancePercent);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(ChaosResistancePercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(DodgeDamageReductionPercent);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(BlockDamageReductionPercent);
 	//offensive of source
 	DECLARE_ATTRIBUTE_CAPTUREDEF(GlobalDamagePercent);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalDamagePercent);
@@ -77,6 +79,8 @@ struct RPGDamageStatics
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ColdResistancePercent, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, LightningResistancePercent, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, ChaosResistancePercent, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, DodgeDamageReductionPercent, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, BlockDamageReductionPercent, Target, false);
 
 		//Source Offensive Attriutes, snapshotted so it takes the value on launch, not on hit
 		DEFINE_ATTRIBUTE_CAPTUREDEF(URPGAttributeSet, GlobalDamagePercent, Source, true);
@@ -153,6 +157,8 @@ URPGDamageExecution::URPGDamageExecution()
 	CAP(ColdResistancePercent);
 	CAP(LightningResistancePercent);
 	CAP(ChaosResistancePercent);
+	CAP(DodgeDamageReductionPercent);
+	CAP(BlockDamageReductionPercent);
 	
 	//Source Offensive
 	CAP(GlobalDamagePercent);
@@ -268,6 +274,12 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	float ChaosResistancePercent = 0.f;
 	CAPTURE(ChaosResistancePercent);
 
+	float DodgeDamageReductionPercent = 0.f;
+	CAPTURE(DodgeDamageReductionPercent);
+
+	float BlockDamageReductionPercent = 0.f;
+	CAPTURE(BlockDamageReductionPercent);
+
 	/**********************************************************************************************************
 	Offensive properties
 	**********************************************************************************************************/
@@ -307,6 +319,8 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	TAGCHECK(MinionDamagePercent, "Ability.Damage.Minion");
 	TAGCHECK(DamageOverTimeDamage, "Ability.Damage.DamageOverTime");
 	TAGCHECK(AreaDamagePercent, "Ability.Damage.Area");
+
+	bool IsImpact = SpecTags.HasTag(FGameplayTag::RequestGameplayTag(FName("Ability.Damage.Impact")));
 
 	/**********************************************************************************************************
 	Elemental Conversion
@@ -426,6 +440,11 @@ void URPGDamageExecution::Execute_Implementation(const FGameplayEffectCustomExec
 	TotalDamageDone *= MinionDamagePercent;
 	TotalDamageDone *= DamageOverTimeDamage;
 	TotalDamageDone *= AreaDamagePercent;
+	if (IsImpact)
+	{
+		TotalDamageDone *= 1 - BlockDamageReductionPercent;
+		TotalDamageDone *= 1 - DodgeDamageReductionPercent;
+	}
 	if (false/*it's a critical hit*/)
 	{
 		TotalDamageDone *= CriticalHitDamagePercent;
