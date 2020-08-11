@@ -21,6 +21,8 @@ public:
 	URPGItem()
 		: Price(0)
 		, MaxLevel(1)
+		, ItemWidth(1)
+		, ItemHeight(1)
 	{}
 
 	/** Type of this item, set in native parent class */
@@ -59,6 +61,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
 	int32 DefaultStartingLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
+	int32 ItemWidth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
+	int32 ItemHeight;
 
 	/** Ability to grant if this item is slotted */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
