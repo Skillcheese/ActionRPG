@@ -6,150 +6,6 @@
 #include "RPGSaveGame.h"
 #include "Items/RPGItem.h"
 
-bool ARPGPlayerControllerBase::AddInventoryItem(URPGLoot* NewItem, int32 count, bool bAutoSlot)
-{
-	bool bChanged = false;
-	if (!NewItem)
-	{
-		UE_LOG(LogActionRPG, Warning, TEXT("AddInventoryItem: Failed trying to add null item!"));
-		return false;
-	}
-
-	if (NewItem->GetItemCount() < 0 || NewItem->Data.ItemLevel < 0)
-	{
-		UE_LOG(LogActionRPG, Warning, TEXT("AddInventoryItem: Failed trying to add item %s with negative count or level!"), *NewItem->GetName());
-		return false;
-	}
-	// Find current item data, which may be empty
-	if (InventoryItems.Contains(NewItem))
-	{
-		NewItem->Data.UpdateItemCountLevel(count);
-		NotifyInventoryItemChanged(true, NewItem);
-		bChanged = true;
-	}
-	else
-	{
-		URPGLoot** OldItemPointer = InventoryItems.FindByPredicate([&](URPGLoot* Item) 
-		{
-			if (!Item || !NewItem)
-			{
-				return false;
-			}
-			return Item->BaseType->GetPrimaryAssetId() == NewItem->BaseType->GetPrimaryAssetId();
-		});
-
-		URPGLoot* OldItem = nullptr;
-
-		if (OldItemPointer)
-		{
-			OldItem = *OldItemPointer;
-		}
-		bool a = NewItem->BaseType->Stackable && NewItem->GetItemCount() <= 0;
-		bool b = NewItem->BaseType->ItemName.EqualTo(FText::FromString(TEXT("Souls")));
-		if (OldItem)
-		{
-			if (OldItem->BaseType->Stackable)
-			{
-				OldItem->Data.UpdateItemCountLevel(count);
-				bChanged = true;
-			}
-			else
-			{
-				if (!a || b) {
-					InventoryItems.Add(NewItem);
-					NotifyInventoryItemChanged(true, NewItem);
-					bChanged = true;
-				}
-			}
-		}
-		else
-		{
-			if (!a || b)
-			{
-				NewItem->Data.ItemCount = count;
-				InventoryItems.Add(NewItem);
-				NotifyInventoryItemChanged(true, NewItem);
-				bChanged = true;
-			}
-		}
-	}
-	if (bAutoSlot)
-	{
-		// Slot item if required
-		bChanged |= FillEmptySlotWithItem(NewItem);
-	}
-	if (bChanged)
-	{
-		// If anything changed, write to save game
-		SaveInventory();
-		return true;
-	}
-	return false;
-}
-
-bool ARPGPlayerControllerBase::RemoveInventoryItem(URPGLoot* RemovedItem, int32 RemoveCount)
-{
-	if (!RemovedItem)
-	{
-		UE_LOG(LogActionRPG, Warning, TEXT("RemoveInventoryItem: Failed trying to remove null item!"));
-		return false;
-	}
-	if (RemovedItem)
-	{
-		if (InventoryItems.Contains(RemovedItem))
-		{
-			if (RemovedItem->BaseType->Stackable)
-			{
-				bool isSlotted = false;
-				for (TPair<FRPGItemSlot, URPGLoot*>& Pair : SlottedItems)
-				{
-					if (Pair.Value == RemovedItem)
-					{
-						isSlotted = true;
-						break;
-					}
-				}
-				if (isSlotted)
-				{
-					InventoryItems.Remove(RemovedItem);
-				}
-				else
-				{
-					if (RemovedItem->Data.UpdateItemCountLevel(-RemoveCount) <= 0)
-					{
-						InventoryItems.Remove(RemovedItem);
-					}
-				}
-				
-			}
-			else
-			{
-				InventoryItems.Remove(RemovedItem);
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}
-	for (TPair<FRPGItemSlot, URPGLoot*>& Pair : SlottedItems)
-	{
-		if (Pair.Value == RemovedItem)
-		{
-			NotifySlottedItemChanged(Pair.Key, Pair.Value);
-		}
-	}
-	// If we got this far, there is a change so notify and save
-	NotifyInventoryItemChanged(false, RemovedItem);
-
-	SaveInventory();
-	return true;
-}
-
 int32 ARPGPlayerControllerBase::SetSkillNodeTaken(USkillNodeBase * SkillNode, bool Taken)
 {
 	if (!SkillNode)
@@ -187,23 +43,6 @@ int32 ARPGPlayerControllerBase::SetSkillNodeTaken(USkillNodeBase * SkillNode, bo
 	return -2;
 }
 
-void ARPGPlayerControllerBase::GetInventoryItems(TArray<URPGLoot*>& Items, FPrimaryAssetType ItemType)
-{
-	for (URPGLoot*& Item : InventoryItems)
-	{
-		if (Item)
-		{
-			FPrimaryAssetId AssetId = Item->BaseType->GetPrimaryAssetId();
-
-			// Filters based on item type
-			if (AssetId.PrimaryAssetType == ItemType || !ItemType.IsValid())
-			{
-				Items.Add(Item);
-			}
-		}	
-	}
-}
-
 TArray<USkillNodeBase*> ARPGPlayerControllerBase::GetSkillNodesTaken()
 {
 	return SkillNodesTaken;
@@ -213,7 +52,7 @@ bool ARPGPlayerControllerBase::SetSlottedItem(FRPGItemSlot ItemSlot, URPGLoot* I
 {
 	// Iterate entire inventory because we need to remove from old slot
 	bool bFound = false;
-	for (TPair<FRPGItemSlot, URPGLoot*>& Pair : SlottedItems)
+	for (TPair<FRPGItemSlot, URPGLoot*>& Pair : GetInventoryComponent()->Equipement)
 	{
 		if (Pair.Key == ItemSlot)
 		{
@@ -277,82 +116,37 @@ bool ARPGPlayerControllerBase::UpdateItemAffixes(URPGLoot* Item, TMap<TSubclassO
 
 URPGLoot* ARPGPlayerControllerBase::GetSlottedItem(FRPGItemSlot ItemSlot)
 {
-	URPGLoot* const* FoundItem = SlottedItems.Find(ItemSlot);
-
-	if (FoundItem)
+	UInventoryComponentC* InventoryComponent = GetInventoryComponent();
+	if (InventoryComponent)
 	{
-		return *FoundItem;
+		URPGLoot* const* FoundItem = InventoryComponent->Equipement.Find(ItemSlot);
+		if (FoundItem)
+		{
+			return *FoundItem;
+		}
 	}
 	return nullptr;
 }
 
-URPGLoot * ARPGPlayerControllerBase::GetSouls(int32 &Count)
+int32 ARPGPlayerControllerBase::GetSouls()
 {
-	URPGLoot* Item = GetSoulsItem();
-	if (Item)
-	{
-		Count = Item->GetItemCount();
-		return Item;
-	}
-	return nullptr;
-}
-
-URPGLoot * ARPGPlayerControllerBase::GetSoulsItem()
-{
-	URPGLoot** SoulsPointer = InventoryItems.FindByPredicate([](URPGLoot* Item)
-	{
-		if (!Item)
-		{
-			return false;
-		}
-		return Item->BaseType->ItemName.EqualTo(FText::FromString(TEXT("Souls")));
-	});
-	if (SoulsPointer)
-	{
-		URPGLoot* Souls = *SoulsPointer;
-		if (Souls)
-		{
-			return Souls;
-		}
-	}
-	return nullptr;
+	return Souls;
 }
 
 bool ARPGPlayerControllerBase::AddSouls(int32 amount, int32 &Count)
 {
-	URPGLoot* Item = GetSoulsItem();
-	if (Item)
-	{
-		Count = Item->Data.UpdateItemCountLevel(amount);
-		return true;
-	}
-	return false;
+	Souls += amount;
+	return true;
 }
 
 bool ARPGPlayerControllerBase::SoulsPurchase(int32 amount, int32 & Count)
 {
-	int32 CurrentSouls = 0;
-	GetSouls(CurrentSouls);
-	if (CurrentSouls >= amount)
+	if (Souls >= amount)
 	{
 		AddSouls(-amount, Count);
 		return true;
 	}
 	return false;
-}
-
-void ARPGPlayerControllerBase::FillEmptySlots()
-{
-	bool bShouldSave = false;
-	for (URPGLoot*& Item: InventoryItems)
-	{
-		bShouldSave |= FillEmptySlotWithItem(Item);
-	}
-
-	if (bShouldSave)
-	{
-		SaveInventory();
-	}
 }
 
 bool ARPGPlayerControllerBase::SaveInventory()
@@ -372,22 +166,26 @@ bool ARPGPlayerControllerBase::SaveInventory()
 		CurrentSaveGame->InventoryData.Reset();
 		CurrentSaveGame->SlottedItems.Reset();
 		CurrentSaveGame->SkillData.Reset();
-
-		for (URPGLoot*& Item : InventoryItems)
+		UInventoryComponentC* InventoryComponent = GetInventoryComponent();
+		if (InventoryComponent)
 		{
-			if (Item)
+			for (TPair<FIntPoint, URPGLoot*> Item : InventoryComponent->InventoryItems)
 			{
-				CurrentSaveGame->InventoryData.Add(FSaveStruct(Item->BaseType->GetPrimaryAssetId(), Item->Data));
+				if (Item.Value)
+				{
+					CurrentSaveGame->InventoryData.Add(FSaveStruct(Item.Key.X,Item.Key.Y, Item.Value->BaseType->GetPrimaryAssetId(), Item.Value->Data));
+				}
+			}
+
+			for (TPair<FRPGItemSlot, URPGLoot*> Item: InventoryComponent->Equipement)
+			{
+				if (Item.Value)
+				{
+					CurrentSaveGame->SlottedItems.Add(Item.Key, FSaveStruct(-1, -1, Item.Value->BaseType->GetPrimaryAssetId(), Item.Value->Data));
+				}
 			}
 		}
 
-		for (const TPair<FRPGItemSlot, URPGLoot*>& SlotPair : SlottedItems)
-		{
-			if (SlotPair.Value)
-			{
-				CurrentSaveGame->SlottedItems.Add(SlotPair.Key, FSaveStruct(SlotPair.Value->BaseType->GetPrimaryAssetId(), SlotPair.Value->Data));
-			}
-		}
 		for (USkillNodeBase*&SkillNode : SkillNodesTaken)
 		{
 			if (SkillNode)
@@ -420,70 +218,15 @@ bool ARPGPlayerControllerBase::RefreshEffects()
 
 bool ARPGPlayerControllerBase::LoadInventory()
 {
-	InventoryItems.Reset();
-	SlottedItems.Reset();
-
-	// Fill in slots from game instance
-	UWorld* World = GetWorld();
-	URPGGameInstanceBase* GameInstance = World ? World->GetGameInstance<URPGGameInstanceBase>() : nullptr;
-
-	if (!GameInstance)
+	UInventoryComponentC* InventoryComponent = GetInventoryComponent();
+	if (InventoryComponent)
 	{
-		return false;
-	}
-
-	for (const TPair<FPrimaryAssetType, int32>& Pair : GameInstance->ItemSlotsPerType)
-	{
-		for (int32 SlotNumber = 0; SlotNumber < Pair.Value; SlotNumber++)
+		if (InventoryComponent->LoadInventory())
 		{
-			SlottedItems.Add(FRPGItemSlot(Pair.Key, SlotNumber), nullptr);
+			NotifyInventoryLoaded();
+			return true;
 		}
 	}
-
-	URPGSaveGame* CurrentSaveGame = GameInstance->GetCurrentSaveGame();
-	URPGAssetManager& AssetManager = URPGAssetManager::Get();
-	if (CurrentSaveGame)
-	{
-		// Copy from save game into controller data
-		bool bFoundAnySlots = false;
-		for (const FSaveStruct& SaveStruct : CurrentSaveGame->InventoryData)
-		{
-			URPGLoot* LoadedItem = AssetManager.ForceLoadItem(SaveStruct.AssetId);
-			if (LoadedItem != nullptr)
-			{
-				LoadedItem->Data = SaveStruct.Data;
-				InventoryItems.Add(LoadedItem);
-			}
-		}
-
-		for (const TPair<FRPGItemSlot, FSaveStruct>& SlotPair : CurrentSaveGame->SlottedItems)
-		{
-			if (SlotPair.Value.CheckIsValid())
-			{
-				URPGLoot* LoadedItem = AssetManager.ForceLoadItem(SlotPair.Value.AssetId);
-				if (GameInstance->IsValidItemSlot(SlotPair.Key) && LoadedItem)
-				{
-					LoadedItem->Data = SlotPair.Value.Data;
-					SlottedItems.Add(SlotPair.Key, LoadedItem);
-					bFoundAnySlots = true;
-				}
-			}
-		}
-
-		if (!bFoundAnySlots)
-		{
-			// Auto slot items as no slots were saved
-			FillEmptySlots();
-		}
-
-		NotifyInventoryLoaded();
-
-		return true;
-	}
-
-	// Load failed but we reset inventory, so need to notify UI
-	NotifyInventoryLoaded();
-
 	return false;
 }
 
@@ -536,43 +279,9 @@ bool ARPGPlayerControllerBase::LoadSkillTree()
 	return false;
 }
 
-bool ARPGPlayerControllerBase::FillEmptySlotWithItem(URPGLoot* NewItem)
+UInventoryComponentC * ARPGPlayerControllerBase::GetInventoryComponent()
 {
-	// Look for an empty item slot to fill with this item
-	FPrimaryAssetType NewItemType = NewItem->GetPrimaryAssetId().PrimaryAssetType;
-	FRPGItemSlot EmptySlot;
-	for (TPair<FRPGItemSlot, URPGLoot*>& Pair : SlottedItems)
-	{
-		if (Pair.Key.ItemType == NewItemType)
-		{
-			if (Pair.Value == NewItem)
-			{
-				// Item is already slotted
-				return false;
-			}
-			else if (Pair.Value == nullptr && (!EmptySlot.IsValid() || EmptySlot.SlotNumber > Pair.Key.SlotNumber))
-			{
-				// We found an empty slot worth filling
-				if (NewItem->GetItemCount() > 0)
-				{
-					EmptySlot = Pair.Key;
-				}
-				else
-				{
-					EmptySlot = Pair.Key;
-				}
-			}
-		}
-	}
-
-	if (EmptySlot.IsValid())
-	{
-		SlottedItems[EmptySlot] = NewItem;
-		NotifySlottedItemChanged(EmptySlot, NewItem);
-		return true;
-	}
-
-	return false;
+	return FindComponentByClass<UInventoryComponentC>();
 }
 
 void ARPGPlayerControllerBase::NotifyInventoryItemChanged(bool bAdded, URPGLoot* Item)

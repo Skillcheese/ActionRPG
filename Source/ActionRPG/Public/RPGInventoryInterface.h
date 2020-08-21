@@ -22,7 +22,7 @@ class ACTIONRPG_API IRPGInventoryInterface
 
 public:
 	/** Returns the map of items to data */
-	virtual const TArray<URPGLoot*>& GetInventory() const = 0;
+	virtual const TMap<FIntPoint, URPGLoot*>& GetInventory() const = 0;
 
 	/** Returns the map of slots to items */
 	virtual const TMap<FRPGItemSlot, URPGLoot*>& GetSlottedItemMap() const = 0;

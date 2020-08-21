@@ -36,6 +36,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = Item)
 	int32 GetItemLevel();
 
+	UFUNCTION(BlueprintPure, Category = Item)
+	void GetItemDimensions(int32 &Width, int32 &Height);
+
+	///0 for unarmed, 1 for one handed, 2 for 2 handed
+	UFUNCTION(BlueprintPure, Category = Item)
+	int32 GetItemHandedness();
+
 	UFUNCTION(BlueprintCallable, Category = Item)
 	int32 SetItemCount(int32 Count);
 

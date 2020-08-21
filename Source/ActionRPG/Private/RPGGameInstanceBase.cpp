@@ -18,16 +18,6 @@ void URPGGameInstanceBase::AddDefaultInventory(URPGSaveGame* SaveGame, bool bRem
 	{
 		SaveGame->InventoryData.Reset();
 	}
-
-	// Now add the default inventory, this only adds if not already in hte inventory
-	for (TPair<FPrimaryAssetId, FRPGItemData>& Pair : DefaultInventory)
-	{
-		if (true/*!SaveGame->InventoryData.Contains(Pair.Key)*/)
-		{
-			FSaveStruct SaveData = FSaveStruct(Pair.Key, Pair.Value);
-			SaveGame->InventoryData.Add(SaveData);
-		}
-	}
 }
 
 bool URPGGameInstanceBase::IsValidItemSlot(FRPGItemSlot ItemSlot) const

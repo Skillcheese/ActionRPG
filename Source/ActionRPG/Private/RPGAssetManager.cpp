@@ -4,16 +4,32 @@
 #include "Items/RPGItem.h"
 #include "AbilitySystemGlobals.h"
 
-const FPrimaryAssetType	URPGAssetManager::PotionItemType = TEXT("Potion");
-const FPrimaryAssetType	URPGAssetManager::SkillItemType = TEXT("Skill");
-const FPrimaryAssetType	URPGAssetManager::TokenItemType = TEXT("Token");
-const FPrimaryAssetType	URPGAssetManager::WeaponItemType = TEXT("Weapon");
-const FPrimaryAssetType	URPGAssetManager::GlovesItemType = TEXT("Gloves");
-const FPrimaryAssetType	URPGAssetManager::BootsItemType = TEXT("Boots");
-const FPrimaryAssetType	URPGAssetManager::HelmetItemType = TEXT("Helmet");
-const FPrimaryAssetType	URPGAssetManager::ChestItemType = TEXT("Chest");
-const FPrimaryAssetType	URPGAssetManager::JewelryItemType = TEXT("Jewelry");
-const FPrimaryAssetType	URPGAssetManager::SkillNodeBase = TEXT("SkillNodeBase");
+#define CREATE(_type_, _text_) \
+	const FPrimaryAssetType	URPGAssetManager::_type_ = TEXT(_text_)
+
+CREATE(PotionItemType, "Potion");
+CREATE(SkillItemType, "Skill");
+CREATE(TokenItemType, "Token");
+CREATE(WeaponItemType, "Weapon");
+CREATE(Sword1HItemType, "Sword1H");
+CREATE(Sword2HItemType, "Sword2H");
+CREATE(Axe1HItemType, "Axe1H");
+CREATE(Axe2HItemType, "Axe2H");
+CREATE(Hammer1HItemType, "Hammer1H");
+CREATE(Hammer2HItemType, "Hammer2H");
+CREATE(BowItemType, "Bow");
+CREATE(ScytheItemType, "Scythe");
+CREATE(StaffItemType, "Staff");
+CREATE(WandItemType, "Wand");
+CREATE(DaggerItemType, "Dagger");
+CREATE(OffHandItemType, "OffHand");
+CREATE(ShieldItemType, "Shield");
+CREATE(GlovesItemType, "Gloves");
+CREATE(BootsItemType, "Boots");
+CREATE(HelmetItemType, "Helmet");
+CREATE(ChestItemType, "Chest");
+CREATE(JewelryItemType, "Jewelry");
+CREATE(SkillNodeBase, "SkillNodeBase");
 
 URPGAssetManager& URPGAssetManager::Get()
 {

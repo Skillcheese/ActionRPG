@@ -12,13 +12,4 @@ class ACTIONRPG_API URPGWeaponItem : public URPGItem
 	GENERATED_BODY()
 
 public:
-	/** Constructor */
-	URPGWeaponItem()
-	{
-		ItemType = URPGAssetManager::WeaponItemType;
-	}
-
-	//0 for unarmed, 1 for one-handed, 2 for two-handed
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon)
-	int32 WeaponWieldType;
 };

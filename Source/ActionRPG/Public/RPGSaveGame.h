@@ -35,8 +35,10 @@ public:
 		Data = FRPGItemData();
 	}
 
-	FSaveStruct(FPrimaryAssetId Id, FRPGItemData data)
+	FSaveStruct(int32 _X_, int32 _Y_, FPrimaryAssetId Id, FRPGItemData data)
 	{
+		X = _X_;
+		Y = _Y_;
 		AssetId = Id;
 		Data = data;
 	}
@@ -54,6 +56,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
 	FRPGItemData Data;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
+	int32 X;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
+	int32 Y;
 };
 
 /** Object that is written to and read from the save game archive, with a data version */
@@ -86,9 +94,6 @@ public:
 	FString UserId;
 
 protected:
-	/** Deprecated way of storing items, this is read in but not saved out */
-	UPROPERTY()
-	TArray<FPrimaryAssetId> InventoryItems_DEPRECATED;
 
 	/** What LatestVersion was when the archive was saved */
 	UPROPERTY()
