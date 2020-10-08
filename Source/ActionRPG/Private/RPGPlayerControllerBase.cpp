@@ -52,30 +52,111 @@ bool ARPGPlayerControllerBase::SetSlottedItem(FRPGItemSlot ItemSlot, URPGLoot* I
 {
 	// Iterate entire inventory because we need to remove from old slot
 	bool bFound = false;
-	for (TPair<FRPGItemSlot, URPGLoot*>& Pair : GetInventoryComponent()->Equipement)
+#define AddEquipment() \
+GetInventoryComponent()->Equipement.Add(ItemSlot, Item); \
+NotifySlottedItemChanged(ItemSlot, Item); \
+SaveInventory(); \
+
+/*
+const FIntPoint *key = GetInventoryComponent()->InventoryItems.FindKey(Item); \
+if (key) \
+{ \
+GetInventoryComponent()->InventoryItems.Remove(*key); \
+} \
+*/
+	if (Item->isWeapon())
 	{
-		if (Pair.Key == ItemSlot)
+		FRPGItemSlot Slot0Key = FRPGItemSlot(FPrimaryAssetType(FName("Weapon")), 0);
+		FRPGItemSlot Slot1Key = FRPGItemSlot(FPrimaryAssetType(FName("Weapon")), 1);
+		URPGLoot** Slot0Ptr = GetInventoryComponent()->Equipement.Find(Slot0Key);
+		URPGLoot** Slot1Ptr = GetInventoryComponent()->Equipement.Find(Slot1Key);
+		URPGLoot* Slot0 = nullptr;
+		URPGLoot* Slot1 = nullptr;
+		if (Slot0Ptr)
 		{
-			// Add to new slot
-			bFound = true;
-			Pair.Value = Item;
-			NotifySlottedItemChanged(Pair.Key, Pair.Value);
+			Slot0 = *Slot0Ptr;
 		}
-		else if (Item != nullptr && Pair.Value == Item)
+		if (Slot1Ptr)
 		{
-			// If this item was found in another slot, remove it
-			Pair.Value = nullptr;
-			NotifySlottedItemChanged(Pair.Key, Pair.Value);
+			Slot1 = *Slot1Ptr;
+		}
+#define DoSlot(num) \
+if (Slot##num)  \
+{ \
+	GetInventoryComponent()->AddNewItemToInventory(Slot##num, Item);\
+	GetInventoryComponent()->Equipement.Remove(Slot##num##Key); \
+}\
+
+		//NotifySlottedItemChanged(Slot##num##Key, nullptr);
+		if (Item->GetItemHandedness() == 2)
+		{
+			DoSlot(0);
+			DoSlot(1);
+			ItemSlot.SlotNumber = 0;
+			AddEquipment();
+			return true;
+		}
+		else if (Item->GetItemHandedness() == 1)
+		{
+			if (ItemSlot.SlotNumber == 0)
+			{
+				if (Slot1)
+				{
+					if (Slot1->GetItemHandedness() == 2)
+					{
+						DoSlot(1);
+					}
+				}
+				DoSlot(0);
+				AddEquipment();
+				return true;
+			}
+			if (ItemSlot.SlotNumber == 1)
+			{
+				if (Slot0)
+				{
+					if (Slot0->GetItemHandedness() == 2)
+					{
+						DoSlot(0);
+					}
+				}
+				DoSlot(1);
+				AddEquipment();
+				return true;
+			}
 		}
 	}
-
-	if (bFound)
+	else
 	{
-		SaveInventory();
-		return true;
+		for (TPair<FRPGItemSlot, URPGLoot*>& Pair : GetInventoryComponent()->Equipement)
+		{
+			if (Pair.Key == ItemSlot)
+			{
+				bFound = true;
+				URPGLoot* Temp = nullptr;
+				if (Pair.Value)
+				{//need to swap
+					Temp = Pair.Value;
+				}
+				// Add to new slot
+				if (Temp)
+				{
+					GetInventoryComponent()->AddNewItemToInventory(Temp, Item);
+					NotifyInventoryItemChanged(true, Temp);
+				}
+				AddEquipment();
+				return true;
+			}
+			else if (Item && Pair.Value == Item)
+			{
+				// If this item was found in another slot, remove it
+				Pair.Value = nullptr;
+				NotifySlottedItemChanged(Pair.Key, Pair.Value);
+			}
+		}
 	}
-
-	return false;
+	AddEquipment();
+	return true;
 }
 
 TMap<TSubclassOf<UGE_Affix>, int32> ARPGPlayerControllerBase::GetInventoryItemAffixes(URPGLoot *Item, TMap<TSubclassOf<UGE_Affix>, int32> &PrefixMap, TMap<TSubclassOf<UGE_Affix>, int32> &SuffixMap, TMap<TSubclassOf<UGE_Affix>, int32> &ImplicitMap, TMap<TSubclassOf<UGE_Affix>, int32> &EnchantMap)

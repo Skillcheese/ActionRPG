@@ -54,4 +54,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Item)
 	int32 UpdateItemLevel(int32 Amount);
+
+	UFUNCTION(BlueprintCallable, Category = Item)
+	bool isWeapon();
 };

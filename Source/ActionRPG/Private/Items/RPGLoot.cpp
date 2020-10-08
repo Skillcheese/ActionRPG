@@ -101,3 +101,8 @@ int32 URPGLoot::UpdateItemLevel(int32 Amount)
 {
 	return SetItemLevel(Data.ItemLevel + Amount);
 }
+
+bool URPGLoot::isWeapon()
+{
+	return GetItemHandedness() > 0;
+}

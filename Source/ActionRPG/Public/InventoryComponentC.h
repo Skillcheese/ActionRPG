@@ -22,6 +22,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Inventory)
 	bool LoadInventory();
+	
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = Inventory)
+	bool AddNewItemToInventory(URPGLoot* Item, URPGLoot* &RemainingItem);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
 	TMap<FIntPoint, URPGLoot*> InventoryItems;
