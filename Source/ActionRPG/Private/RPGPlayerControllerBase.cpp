@@ -64,6 +64,15 @@ if (key) \
 GetInventoryComponent()->InventoryItems.Remove(*key); \
 } \
 */
+	if (!Item)
+	{
+		if (GetInventoryComponent()->Equipement.Find(ItemSlot))
+		{
+			GetInventoryComponent()->Equipement.Remove(ItemSlot);
+		}
+		SaveInventory();
+		return true;
+	}
 	if (Item->isWeapon())
 	{
 		FRPGItemSlot Slot0Key = FRPGItemSlot(FPrimaryAssetType(FName("Weapon")), 0);
@@ -83,8 +92,9 @@ GetInventoryComponent()->InventoryItems.Remove(*key); \
 #define DoSlot(num) \
 if (Slot##num)  \
 { \
-	GetInventoryComponent()->AddNewItemToInventory(Slot##num, Item);\
+	GetInventoryComponent()->AddNewItemToInventory(Slot##num, Slot##num);\
 	GetInventoryComponent()->Equipement.Remove(Slot##num##Key); \
+	SaveInventory(); \
 }\
 
 		//NotifySlottedItemChanged(Slot##num##Key, nullptr);
@@ -128,32 +138,19 @@ if (Slot##num)  \
 	}
 	else
 	{
-		for (TPair<FRPGItemSlot, URPGLoot*>& Pair : GetInventoryComponent()->Equipement)
+		URPGLoot** ExistingItemPtr = GetInventoryComponent()->Equipement.Find(ItemSlot);
+		URPGLoot* ExistingItem = nullptr;
+		if (ExistingItemPtr)
 		{
-			if (Pair.Key == ItemSlot)
-			{
-				bFound = true;
-				URPGLoot* Temp = nullptr;
-				if (Pair.Value)
-				{//need to swap
-					Temp = Pair.Value;
-				}
-				// Add to new slot
-				if (Temp)
-				{
-					GetInventoryComponent()->AddNewItemToInventory(Temp, Item);
-					NotifyInventoryItemChanged(true, Temp);
-				}
-				AddEquipment();
-				return true;
-			}
-			else if (Item && Pair.Value == Item)
-			{
-				// If this item was found in another slot, remove it
-				Pair.Value = nullptr;
-				NotifySlottedItemChanged(Pair.Key, Pair.Value);
-			}
+			ExistingItem = *ExistingItemPtr;
 		}
+		if (ExistingItem)
+		{
+			GetInventoryComponent()->AddNewItemToInventory(ExistingItem, ExistingItem);
+			NotifyInventoryItemChanged(true, ExistingItem);
+		}
+		AddEquipment();
+		return true;
 	}
 	AddEquipment();
 	return true;

@@ -171,18 +171,22 @@ void ARPGCharacterBase::FillSlottedAbilitySpecs(TMap<FRPGItemSlot, FGameplayAbil
 	}
 
 	// Now potentially override with inventory
-	if (InventorySource)
+	if (Controller)
 	{
-		const TMap<FRPGItemSlot, URPGLoot*>& SlottedItemMap = InventorySource->GetSlottedItemMap();
-
-		for (const TPair<FRPGItemSlot, URPGLoot*>& ItemPair : SlottedItemMap)
+		ARPGPlayerControllerBase* Control = dynamic_cast<ARPGPlayerControllerBase*> (Controller);
+		if (Control)
 		{
-			URPGLoot* SlottedItem = ItemPair.Value;
-
-			if (SlottedItem && SlottedItem->BaseType->GrantedAbility)
+			const TMap<FRPGItemSlot, URPGLoot*>& SlottedItemMap = Control->GetInventoryComponent()->Equipement;
+			 
+			for (const TPair<FRPGItemSlot, URPGLoot*>& ItemPair : SlottedItemMap)
 			{
-				// This will override anything from default
-				SlottedAbilitySpecs.Add(ItemPair.Key, FGameplayAbilitySpec(SlottedItem->BaseType->GrantedAbility, GetCharacterLevel(), INDEX_NONE, SlottedItem));
+				URPGLoot* SlottedItem = ItemPair.Value;
+
+				if (SlottedItem && SlottedItem->BaseType->GrantedAbility)
+				{
+					// This will override anything from default
+					SlottedAbilitySpecs.Add(ItemPair.Key, FGameplayAbilitySpec(SlottedItem->BaseType->GrantedAbility, GetCharacterLevel(), INDEX_NONE, SlottedItem));
+				}
 			}
 		}
 	}
@@ -365,12 +369,10 @@ bool ARPGCharacterBase::RefreshEffects()
 bool ARPGCharacterBase::ActivateAbilitiesWithItemSlot(FRPGItemSlot ItemSlot, bool bAllowRemoteActivation)
 {
 	FGameplayAbilitySpecHandle* FoundHandle = SlottedAbilities.Find(ItemSlot);
-
 	if (FoundHandle && AbilitySystemComponent)
 	{
 		return AbilitySystemComponent->TryActivateAbility(*FoundHandle, bAllowRemoteActivation);
 	}
-
 	return false;
 }
 

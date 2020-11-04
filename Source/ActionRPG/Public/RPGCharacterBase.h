@@ -9,6 +9,7 @@
 #include "AbilitySystemInterface.h"
 #include "Abilities/RPGAbilitySystemComponent.h"
 #include "Abilities/RPGAttributeSet.h"
+#include "RPGPlayerControllerBase.h"
 #include "GE_Affix.h"
 #include "Items/RPGLoot.h"
 #include "SkillNodeBase.h"

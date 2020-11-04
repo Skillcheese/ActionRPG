@@ -32,6 +32,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
 	TMap<FRPGItemSlot, URPGLoot*> Equipement;
 
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -71,3 +71,28 @@ TArray<FActiveGameplayEffectHandle> URPGGameplayAbility::ApplyEffectContainer(FG
 	FRPGGameplayEffectContainerSpec Spec = MakeEffectContainerSpec(ContainerTag, EventData, OverrideGameplayLevel);
 	return ApplyEffectContainerSpec(Spec);
 }
+
+bool URPGGameplayAbility::CheckCooldown(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo * ActorInfo, OUT FGameplayTagContainer * OptionalRelevantTags) const
+{
+	const FGameplayTagContainer* CooldownTags = GetCooldownTags();
+	if (CooldownTags)
+	{
+		if (CooldownTags->Num() > 0)
+		{
+			UAbilitySystemComponent* const AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get();
+			check(AbilitySystemComponent != nullptr);
+			if (AbilitySystemComponent->HasAnyMatchingGameplayTags(*CooldownTags))
+			{
+				//const FGameplayTag& CooldownTag = UAbilitySystemGlobals::Get().ActivateFailCooldownTag;
+
+				//if (OptionalRelevantTags && CooldownTag.IsValid())
+				//{
+				//	OptionalRelevantTags->AddTag(CooldownTag);
+				//}
+
+				return false;
+			}
+		}
+	}
+	return true;
+}
