@@ -28,6 +28,15 @@ public:
 	FPrimaryAssetType ItemType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Item)
+	TMap<TSubclassOf<UGE_Affix>, int32> BasePrefix;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Item)
+	TMap<TSubclassOf<UGE_Affix>, int32> BaseSuffix;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Item)
+	TMap<TSubclassOf<UGE_Affix>, int32> BaseImplicit;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Item)
 	TMap<TSubclassOf<UGE_Affix>, int32> BaseEnchants;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
